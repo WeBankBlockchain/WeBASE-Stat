@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--对应mapper接口 -->
+<mapper namespace="com.webank.webase.stat.data.mapper.NodeMonitorMapper">
+	<resultMap id="basicResultMap"
+		type="com.webank.webase.stat.data.entity.TbNodeMonitor">
+		<id column="id" javaType="java.lang.Long" jdbcType="BIGINT"
+			property="id" />
+		<result column="front_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="frontId" />
+		<result column="group_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="groupId" />
+		<result column="block_height" javaType="java.math.BigInteger"
+			jdbcType="BIGINT" property="blockHeight" />
+		<result column="pbft_view" javaType="java.math.BigInteger"
+			jdbcType="BIGINT" property="pbftView" />
+		<result column="pending_transaction_count" javaType="java.math.BigInteger"
+			jdbcType="BIGINT" property="pendingTransactionCount" />
+		<result column="timestamp" javaType="java.lang.Long" jdbcType="BIGINT"
+			property="timestamp" />
+	</resultMap>
+
+	<insert id="add" parameterType="com.webank.webase.stat.data.entity.TbNodeMonitor">
+		insert into
+		tb_node_monitor_#{frontId}
+		(id,front_id,group_id,block_height,pbft_view,pending_transaction_count,timestamp)
+		values(#{id},#{frontId},#{groupId},#{blockHeight},#{pbftView},#{pendingTransactionCount},#{timestamp})
+	</insert>
+
+	<select id="getMaxData" resultMap="basicResultMap">
+		select * from
+		tb_node_monitor_#{frontId}
+		where id = (select max(id) from
+		tb_node_monitor_#{frontId} where group_id = #{groupId})
+	</select>
+
+	<select id="getCount" resultType="java.lang.Integer">
+		select count(1) from
+		tb_node_monitor_#{frontId}
+		where 1 = 1
+		<if test="groupId != null">
+			and group_id = #{groupId}
+		</if>
+		<if test="beginDate != null">
+			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+		</if>
+	</select>
+
+	<select id="getList" resultMap="basicResultMap">
+		select * from
+		tb_node_monitor_#{frontId}
+		where 1 = 1
+		<if test="groupId != null">
+			and group_id = #{groupId}
+		</if>
+		<if test="beginDate != null">
+			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+		</if>
+		order by id desc
+		<if test="start != null and pageSize != null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+
+</mapper>

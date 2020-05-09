@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--对应mapper接口 -->
+<mapper namespace="com.webank.webase.stat.data.mapper.ServerPerformanceMapper">
+	<resultMap id="basicResultMap"
+		type="com.webank.webase.stat.data.entity.TbServerPerformance">
+		<id column="id" javaType="java.lang.Long" jdbcType="BIGINT"
+			property="id" />
+		<result column="front_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="frontId" />
+		<result column="cpu_use_ratio" javaType="java.math.BigDecimal"
+			jdbcType="DECIMAL" property="cpuUseRatio" />
+		<result column="disk_use_ratio" javaType="java.math.BigDecimal"
+			jdbcType="DECIMAL" property="diskUseRatio" />
+		<result column="memory_use_ratio" javaType="java.math.BigDecimal"
+			jdbcType="DECIMAL" property="memoryUseRatio" />
+		<result column="rxbps" javaType="java.math.BigDecimal"
+			jdbcType="DECIMAL" property="rxbps" />
+		<result column="txbps" javaType="java.math.BigDecimal"
+			jdbcType="DECIMAL" property="txbps" />
+		<result column="timestamp" javaType="java.lang.Long" jdbcType="BIGINT"
+			property="timestamp" />
+	</resultMap>
+
+	<insert id="add"
+		parameterType="com.webank.webase.stat.data.entity.TbServerPerformance">
+		insert into
+		tb_server_performance_#{frontId}
+		(id,front_id,cpu_use_ratio,disk_use_ratio,memory_use_ratio,rxbps,txbps,timestamp)
+		values(#{id},#{frontId},#{cpuUseRatio},#{diskUseRatio},#{memoryUseRatio},#{rxbps},#{txbps},#{timestamp})
+	</insert>
+
+	<select id="getMaxData" resultMap="basicResultMap">
+		select * from
+		tb_server_performance_#{frontId}
+		where id = (select max(id) from
+		tb_server_performance_#{frontId})
+	</select>
+
+	<select id="getCount" resultType="java.lang.Integer">
+		select count(1) from
+		tb_server_performance_#{frontId}
+		where 1 = 1
+		<if test="beginDate != null">
+			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+		</if>
+	</select>
+
+	<select id="getList" resultMap="basicResultMap">
+		select * from
+		tb_server_performance_#{frontId}
+		where 1 = 1
+		<if test="beginDate != null">
+			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+		</if>
+		<if test="endDate != null">
+			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+		</if>
+		order by id desc
+		<if test="start != null and pageSize != null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+
+</mapper>
