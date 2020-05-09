@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--对应mapper接口 -->
+<mapper namespace="com.webank.webase.stat.group.GroupMapper">
+	<resultMap id="basicResultMap" type="com.webank.webase.stat.group.entity.TbGroup">
+		<id column="front_id" javaType="java.lang.Integer" jdbcType="INTEGER"
+			property="frontId" />
+		<id column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER"
+			property="groupId" />
+		<result column="description" javaType="java.lang.String"
+			jdbcType="VARCHAR" property="description" />
+		<result column="create_time" javaType="java.time.LocalDateTime"
+			jdbcType="TIMESTAMP" property="createTime" />
+		<result column="modify_time" javaType="java.time.LocalDateTime"
+			jdbcType="TIMESTAMP" property="modifyTime" />
+	</resultMap>
+
+	<insert id="add" parameterType="com.webank.webase.stat.group.entity.TbGroup">
+		insert ignore into tb_group
+		(front_id,group_id,description,create_time,modify_time)
+		values(#{frontId},#{groupId},#{description},NOW(),NOW())
+	</insert>
+
+	<select id="getCount" resultType="java.lang.Integer">
+		select count(1) from tb_group where 1 = 1
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
+	</select>
+
+	<select id="getList" resultMap="basicResultMap">
+		select * from tb_group where 1=1
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
+		order by group_id asc
+	</select>
+
+	<delete id="remove">
+		delete from tb_group
+		where front_id = #{frontId}
+		<if test="groupId != null">
+			and group_id = #{groupId}
+		</if>
+	</delete>
+</mapper>

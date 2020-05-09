@@ -1,0 +1,40 @@
+server:
+  port: 5008
+  servlet:
+    context-path: /WeBASE-Stat
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/webasestat?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+    username: "defaultAccount"
+    password: "defaultPassword"
+
+mybatis:
+  typeAliasesPackage: com.webank.webase.stat
+  mapperLocations: classpath:mapper/*.xml
+
+constant:
+  ## task info
+  pageSize: 100
+  updateFrontInfoInterval: 600000
+  resetGroupListInterval: 60000
+  pullGroupBasicDataInterval: 60000
+  pullNetWorkDataInterval: 5000
+  pullGasDataInterval: 5000
+  pullNodeMonitorInterval: 5000
+  pullServerPerformanceInterval: 5000
+
+  ## front http request
+  httpTimeOut: 10000
+
+executor:
+  corePoolSize: 50
+  maxPoolSize: 100
+  queueSize: 50
+  threadNamePrefix: "stat-async-"
+  
+logging:
+  config: classpath:log/log4j2.xml
+  level:
+    com.webank.webase.stat: info
