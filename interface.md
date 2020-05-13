@@ -407,7 +407,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/groupBasicData?frontId=1001&groupId=1&pag
 }
 ```
 
-### 3.2 查询群组基本数据
+### 3.2 查询网络统计日志数据
 
 #### 3.2.1 传输协议规范
 
@@ -490,7 +490,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/netWorkData?frontId=1001&groupId=1&pageSi
 }
 ```
 
-### 3.3 查询群组基本数据
+### 3.3 查询交易Gas统计日志数据
 
 #### 3.3.1 传输协议规范
 
@@ -573,7 +573,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/gasData?frontId=1001&groupId=1&pageSize=1
 }
 ```
 
-### 3.4 查询群组基本数据
+### 3.4 查询前置节点监控数据
 
 #### 3.4.1 传输协议规范
 
@@ -658,7 +658,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/nodeMonitor?frontId=1001&groupId=1&pageSi
 }
 ```
 
-### 3.5 查询群组基本数据
+### 3.5 查询前置服务器性能数据
 
 #### 3.5.1 传输协议规范
 
