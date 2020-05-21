@@ -17,6 +17,7 @@ repositories {
     maven {url "http://maven.aliyun.com/nexus/content/groups/public/"}
     
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url 'https://dl.bintray.com/ethereum/maven/' }
     mavenLocal()
     mavenCentral()
 }
@@ -89,6 +90,7 @@ configurations {
     all*.exclude group: 'jline', module: 'jline'
     all*.exclude group: 'com.google.protobuf', module: 'protobuf-java'
     all*.exclude group: 'javax.annotation', module: 'javax.annotation-api'
+    all*.exclude group: 'org.ethereum'
 }
 
 sourceSets {
