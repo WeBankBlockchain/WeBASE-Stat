@@ -14,7 +14,6 @@
 package com.webank.webase.stat.front;
 
 
-import com.alibaba.fastjson.JSON;
 import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.controller.BaseController;
 import com.webank.webase.stat.base.entity.BasePageResponse;
@@ -58,14 +57,11 @@ public class FrontController extends BaseController {
             BindingResult result) {
         checkBindResult(result);
         Instant startTime = Instant.now();
-        log.info("start newFront startTime:{} frontInfo:{}", startTime.toEpochMilli(),
-                JSON.toJSONString(reqNewFront));
+        log.info("start newFront.");
         BaseResponse baseResponse = new BaseResponse(ConstantCode.SUCCESS);
         TbFront tbFront = frontService.newFront(reqNewFront);
         baseResponse.setData(tbFront);
-        log.info("end newFront useTime:{} result:{}",
-                Duration.between(startTime, Instant.now()).toMillis(),
-                JSON.toJSONString(baseResponse));
+        log.info("end newFront useTime:{}", Duration.between(startTime, Instant.now()).toMillis());
         return baseResponse;
     }
 
@@ -79,7 +75,7 @@ public class FrontController extends BaseController {
             throws BaseException {
         BasePageResponse pagesponse = new BasePageResponse(ConstantCode.SUCCESS);
         Instant startTime = Instant.now();
-        log.info("start queryFrontList startTime:{} frontId:{}", startTime.toEpochMilli(), frontId);
+        log.info("start queryFrontList.frontId:{}", frontId);
 
         // param
         FrontParam param = new FrontParam();
@@ -94,8 +90,7 @@ public class FrontController extends BaseController {
         }
 
         log.info("end queryFrontList useTime:{} result:{}",
-                Duration.between(startTime, Instant.now()).toMillis(),
-                JSON.toJSONString(pagesponse));
+                Duration.between(startTime, Instant.now()).toMillis());
         return pagesponse;
     }
 
@@ -105,15 +100,14 @@ public class FrontController extends BaseController {
     @DeleteMapping(value = "/{frontId}")
     public BaseResponse removeFront(@PathVariable("frontId") Integer frontId) {
         Instant startTime = Instant.now();
-        log.info("start removeFront startTime:{} frontId:{}", startTime.toEpochMilli(), frontId);
+        log.info("start removeFront. frontId:{}", frontId);
         BaseResponse baseResponse = new BaseResponse(ConstantCode.SUCCESS);
 
         // remove
         frontService.removeByFrontId(frontId);
 
-        log.info("end removeFront useTime:{} result:{}",
-                Duration.between(startTime, Instant.now()).toMillis(),
-                JSON.toJSONString(baseResponse));
+        log.info("end removeFront useTime:{}",
+                Duration.between(startTime, Instant.now()).toMillis());
         return baseResponse;
     }
 }
