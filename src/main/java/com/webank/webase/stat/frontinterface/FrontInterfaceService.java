@@ -13,12 +13,13 @@
  */
 package com.webank.webase.stat.frontinterface;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.entity.BasePageResponse;
 import com.webank.webase.stat.base.exception.BaseException;
 import com.webank.webase.stat.base.tools.HttpRequestTools;
+import com.webank.webase.stat.base.tools.JacksonUtils;
 import com.webank.webase.stat.front.entity.TransactionCount;
 import com.webank.webase.stat.frontinterface.entity.GroupSizeInfo;
 import com.webank.webase.stat.frontinterface.entity.NetWorkData;
@@ -32,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 import org.fisco.bcos.web3j.protocol.core.methods.response.BcosBlock.Block;
 import org.fisco.bcos.web3j.protocol.core.methods.response.Transaction;
 import org.fisco.bcos.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -41,6 +41,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -106,7 +107,8 @@ public class FrontInterfaceService {
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<NetWorkData> list =
-                JSON.parseArray(JSON.toJSONString(frontRsp.getData()), NetWorkData.class);
+                JacksonUtils.stringToObj(JacksonUtils.objToString(frontRsp.getData()),
+                        new TypeReference<List<NetWorkData>>() {});
         return list;
     }
 
@@ -131,13 +133,13 @@ public class FrontInterfaceService {
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<TxGasData> list =
-                JSON.parseArray(JSON.toJSONString(frontRsp.getData()), TxGasData.class);
+                JacksonUtils.stringToObj(JacksonUtils.objToString(frontRsp.getData()),
+                        new TypeReference<List<TxGasData>>() {});
         return list;
     }
 
     public Object deleteLogData(String frontIp, Integer frontPort, Integer groupId, Integer type,
             LocalDateTime keepEndDate) {
-        log.debug("start deleteLogData. groupId:{}", groupId);
         Map<String, String> map = new HashMap<>();
         map.put("groupId", String.valueOf(groupId));
         map.put("type", String.valueOf(type));
@@ -146,7 +148,6 @@ public class FrontInterfaceService {
         String uri = HttpRequestTools.getQueryUri(FrontRestTools.URI_CHARGING_DELETE_DATA, map);
 
         Object frontRsp = deleteToFront(groupId, frontIp, frontPort, uri, null, Object.class);
-        log.debug("end deleteLogData. frontRsp:{}", JSON.toJSONString(frontRsp));
         return frontRsp;
     }
 
@@ -167,7 +168,8 @@ public class FrontInterfaceService {
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<NodeMonitor> list =
-                JSON.parseArray(JSON.toJSONString(frontRsp.getData()), NodeMonitor.class);
+                JacksonUtils.stringToObj(JacksonUtils.objToString(frontRsp.getData()),
+                        new TypeReference<List<NodeMonitor>>() {});
         return list;
     }
 
@@ -187,7 +189,8 @@ public class FrontInterfaceService {
         BasePageResponse frontRsp =
                 getFromFront(Integer.MAX_VALUE, frontIp, frontPort, uri, BasePageResponse.class);
         List<Performance> list =
-                JSON.parseArray(JSON.toJSONString(frontRsp.getData()), Performance.class);
+                JacksonUtils.stringToObj(JacksonUtils.objToString(frontRsp.getData()),
+                        new TypeReference<List<Performance>>() {});
         return list;
     }
 
@@ -214,7 +217,8 @@ public class FrontInterfaceService {
         Integer groupId = Integer.MAX_VALUE;
         String result = getFromFront(groupId, frontIp, frontPort,
                 FrontRestTools.URI_GET_GROUP_SIZE_INFOS, String.class);
-        List<GroupSizeInfo> list = JSON.parseArray(result, GroupSizeInfo.class);
+        List<GroupSizeInfo> list =
+                JacksonUtils.stringToObj(result, new TypeReference<List<GroupSizeInfo>>() {});
         return list;
     }
 
@@ -260,19 +264,18 @@ public class FrontInterfaceService {
             log.error("requestFront ResourceAccessException.", e);
             throw new BaseException(ConstantCode.REQUEST_FRONT_FAIL);
         } catch (HttpStatusCodeException e) {
-            JSONObject error = JSONObject.parseObject(e.getResponseBodyAsString());
-            log.error("requestFront fail. error:{}", JSON.toJSONString(error));
-            String errorMessage = error.getString("errorMessage");
-            if (StringUtils.isBlank(errorMessage)) {
+            JsonNode error = JacksonUtils.stringToJsonNode(e.getResponseBodyAsString());
+            log.error("requestFront fail. error:{}", error);
+            if (ObjectUtils.isEmpty(error.get("errorMessage"))) {
                 throw new BaseException(ConstantCode.REQUEST_NODE_EXCEPTION);
             }
+            String errorMessage = error.get("errorMessage").asText();
             if (errorMessage.contains("code")) {
-                JSONObject errorInside = JSONObject.parseObject(
-                        JSONObject.parseObject(error.getString("errorMessage")).getString("error"));
-                throw new BaseException(errorInside.getInteger("code"),
-                        errorInside.getString("message"));
+                JsonNode errorInside = error.get("errorMessage").get("error");
+                throw new BaseException(errorInside.get("code").asInt(),
+                        errorInside.get("message").asText());
             }
-            throw new BaseException(error.getInteger("code"), errorMessage);
+            throw new BaseException(error.get("code").asInt(), errorMessage);
         }
     }
 }

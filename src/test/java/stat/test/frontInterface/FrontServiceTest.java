@@ -13,7 +13,6 @@
  */
 package stat.test.frontInterface;
 
-import com.alibaba.fastjson.JSON;
 import com.webank.webase.stat.Application;
 import com.webank.webase.stat.frontinterface.FrontInterfaceService;
 import java.util.List;
@@ -36,6 +35,6 @@ public class FrontServiceTest {
     public void getGroupListTest() {
         List<String> list = frontInterface.getGroupList(frontIp, frontPort);
         assert (list != null && list.size() > 0);
-        System.out.println("=====================list:" + JSON.toJSONString(list));
+        System.out.println("=====================list:" + list);
     }
 }

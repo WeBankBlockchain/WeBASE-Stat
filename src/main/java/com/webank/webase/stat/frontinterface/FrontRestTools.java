@@ -13,7 +13,7 @@
  */
 package com.webank.webase.stat.frontinterface;
 
-import com.alibaba.fastjson.JSON;
+import com.webank.webase.stat.base.tools.JacksonUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -77,7 +77,7 @@ public class FrontRestTools {
         headers.setContentType(MediaType.APPLICATION_JSON);
         String paramStr = null;
         if (Objects.nonNull(param)) {
-            paramStr = JSON.toJSONString(param);
+            paramStr = JacksonUtils.objToString(param);
         }
         HttpEntity requestEntity = new HttpEntity(paramStr, headers);
         return requestEntity;
