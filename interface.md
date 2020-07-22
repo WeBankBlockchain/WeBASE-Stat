@@ -1,3 +1,5 @@
+
+
 # 接口说明
 
 [TOC]
@@ -407,7 +409,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/groupBasicData?frontId=1001&groupId=1&pag
 }
 ```
 
-### 3.2 查询群组基本数据
+### 3.2 查询群组网络基本数据
 
 #### 3.2.1 传输协议规范
 
@@ -490,7 +492,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/netWorkData?frontId=1001&groupId=1&pageSi
 }
 ```
 
-### 3.3 查询群组基本数据
+### 3.3 查询群组GAS基本数据
 
 #### 3.3.1 传输协议规范
 
@@ -573,7 +575,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/gasData?frontId=1001&groupId=1&pageSize=1
 }
 ```
 
-### 3.4 查询群组基本数据
+### 3.4 查询群组节点监控基本数据
 
 #### 3.4.1 传输协议规范
 
@@ -658,7 +660,7 @@ http://127.0.0.1:5008/WeBASE-Stat/data/nodeMonitor?frontId=1001&groupId=1&pageSi
 }
 ```
 
-### 3.5 查询群组基本数据
+### 3.5 查询群组主机性能基本数据
 
 #### 3.5.1 传输协议规范
 
@@ -759,3 +761,4 @@ http://127.0.0.1:5008/WeBASE-Stat/data/serverPerformance?frontId=1001&pageSize=1
 | 205003 | wrong host or port                     | 地址或端口错误 |
 | 205004 | request node exception                 | 请求节点失败   |
 | 305000 | param exception                        | 参数异常       |
+
