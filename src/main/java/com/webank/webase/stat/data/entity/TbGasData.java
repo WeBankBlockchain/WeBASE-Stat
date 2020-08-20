@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_gas_data.
+ * gas data of group
  */
 @Data
 @NoArgsConstructor

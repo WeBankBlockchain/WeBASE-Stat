@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_network_data.
+ * flow size of node consensus and node channel with sdk
  */
 @Data
 @NoArgsConstructor

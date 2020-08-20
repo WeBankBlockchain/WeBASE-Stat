@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_node_monitor.
+ * using sigar record of cpu, disk, memory, rxbps, txbps
  */
 @Data
 @NoArgsConstructor

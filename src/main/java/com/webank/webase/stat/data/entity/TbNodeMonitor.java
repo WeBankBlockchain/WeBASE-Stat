@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_node_monitor.
+ * node's group height and pbft view data
  */
 @Data
 @NoArgsConstructor
