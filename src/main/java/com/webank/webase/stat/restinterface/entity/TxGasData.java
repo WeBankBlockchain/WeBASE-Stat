@@ -11,18 +11,18 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.frontinterface.entity;
+package com.webank.webase.stat.restinterface.entity;
 
 import lombok.Data;
 
 /**
- * entity of NetWorkData
+ * entity of TxGasData
  */
 @Data
-public class NetWorkData {
+public class TxGasData {
     private Long id;
-    private Long totalIn;
-    private Long totalOut;
+    private String transHash;
+    private Long gasUsed;
     private Integer groupId;
     private Long timestamp;
 }

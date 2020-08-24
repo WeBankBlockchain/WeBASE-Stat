@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.frontinterface;
+package com.webank.webase.stat.restinterface;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,12 +21,12 @@ import com.webank.webase.stat.base.exception.BaseException;
 import com.webank.webase.stat.base.tools.HttpRequestTools;
 import com.webank.webase.stat.base.tools.JacksonUtils;
 import com.webank.webase.stat.front.entity.TransactionCount;
-import com.webank.webase.stat.frontinterface.entity.GroupSizeInfo;
-import com.webank.webase.stat.frontinterface.entity.NetWorkData;
-import com.webank.webase.stat.frontinterface.entity.NodeMonitor;
-import com.webank.webase.stat.frontinterface.entity.Performance;
-import com.webank.webase.stat.frontinterface.entity.PerformanceConfig;
-import com.webank.webase.stat.frontinterface.entity.TxGasData;
+import com.webank.webase.stat.restinterface.entity.GroupSizeInfo;
+import com.webank.webase.stat.restinterface.entity.NetWorkData;
+import com.webank.webase.stat.restinterface.entity.NodeMonitor;
+import com.webank.webase.stat.restinterface.entity.Performance;
+import com.webank.webase.stat.restinterface.entity.PerformanceConfig;
+import com.webank.webase.stat.restinterface.entity.TxGasData;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -56,36 +56,36 @@ public class FrontInterfaceService {
     @SuppressWarnings("unchecked")
     public List<String> getGroupList(String frontIp, Integer frontPort) {
         Integer groupId = Integer.MAX_VALUE;
-        return getFromFront(groupId, frontIp, frontPort, FrontRestTools.URI_GROUP_PLIST,
+        return getFromFront(groupId, frontIp, frontPort, RestTools.URI_GROUP_PLIST,
                 List.class);
     }
 
     public BigInteger getBlockNumber(String frontIp, Integer frontPort, Integer groupId) {
-        return getFromFront(groupId, frontIp, frontPort, FrontRestTools.URI_BLOCK_NUMBER,
+        return getFromFront(groupId, frontIp, frontPort, RestTools.URI_BLOCK_NUMBER,
                 BigInteger.class);
     }
 
     public Block getBlockByNumber(String frontIp, Integer frontPort, Integer groupId,
             BigInteger blockNmber) {
-        String uri = String.format(FrontRestTools.URI_BLOCK_BY_NUMBER, blockNmber);
+        String uri = String.format(RestTools.URI_BLOCK_BY_NUMBER, blockNmber);
         return getFromFront(groupId, frontIp, frontPort, uri, Block.class);
     }
 
     public TransactionCount getTotalTransactionCount(String frontIp, Integer frontPort,
             Integer groupId) {
-        return getFromFront(groupId, frontIp, frontPort, FrontRestTools.URI_TRANS_TOTAL,
+        return getFromFront(groupId, frontIp, frontPort, RestTools.URI_TRANS_TOTAL,
                 TransactionCount.class);
     }
 
     public Transaction getTransactionByHash(String frontIp, Integer frontPort, Integer groupId,
             String transHash) {
-        String uri = String.format(FrontRestTools.URI_TRANS_BY_HASH, transHash);
+        String uri = String.format(RestTools.URI_TRANS_BY_HASH, transHash);
         return getFromFront(groupId, frontIp, frontPort, uri, Transaction.class);
     }
 
     public TransactionReceipt getTransactionReceipt(String frontIp, Integer frontPort,
             Integer groupId, String transHash) {
-        String uri = String.format(FrontRestTools.URI_TRANS_RECEIPT, transHash);
+        String uri = String.format(RestTools.URI_TRANS_RECEIPT, transHash);
         return getFromFront(groupId, frontIp, frontPort, uri, TransactionReceipt.class);
     }
 
@@ -103,7 +103,7 @@ public class FrontInterfaceService {
         }
 
         String uri =
-                HttpRequestTools.getQueryUri(FrontRestTools.URI_CHARGING_GET_NETWORK_DATA, map);
+                HttpRequestTools.getQueryUri(RestTools.URI_CHARGING_GET_NETWORK_DATA, map);
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<NetWorkData> list =
@@ -129,7 +129,7 @@ public class FrontInterfaceService {
             map.put("transHash", transHash);
         }
 
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.URI_CHARGING_GET_TXGASDATA, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.URI_CHARGING_GET_TXGASDATA, map);
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<TxGasData> list =
@@ -145,7 +145,7 @@ public class FrontInterfaceService {
         map.put("type", String.valueOf(type));
         map.put("keepEndDate", String.valueOf(keepEndDate));
 
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.URI_CHARGING_DELETE_DATA, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.URI_CHARGING_DELETE_DATA, map);
 
         Object frontRsp = deleteToFront(groupId, frontIp, frontPort, uri, null, Object.class);
         return frontRsp;
@@ -164,7 +164,7 @@ public class FrontInterfaceService {
             map.put("endDate", String.valueOf(endDate));
         }
 
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.URI_NODE_MONITOR, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.URI_NODE_MONITOR, map);
         BasePageResponse frontRsp =
                 getFromFront(groupId, frontIp, frontPort, uri, BasePageResponse.class);
         List<NodeMonitor> list =
@@ -185,7 +185,7 @@ public class FrontInterfaceService {
             map.put("endDate", String.valueOf(endDate));
         }
 
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.FRONT_PERFORMANCE_PAGING, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.FRONT_PERFORMANCE_PAGING, map);
         BasePageResponse frontRsp =
                 getFromFront(Integer.MAX_VALUE, frontIp, frontPort, uri, BasePageResponse.class);
         List<Performance> list =
@@ -196,27 +196,27 @@ public class FrontInterfaceService {
 
     public Object getNodeMonitorInfo(String frontIp, Integer frontPort, Integer groupId,
             Map<String, String> map) {
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.URI_CHAIN, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.URI_CHAIN, map);
         Object frontRsp = getFromFront(groupId, frontIp, frontPort, uri, Object.class);
         return frontRsp;
     }
 
     public Object getPerformanceRatio(String frontIp, Integer frontPort, Map<String, String> map) {
-        String uri = HttpRequestTools.getQueryUri(FrontRestTools.FRONT_PERFORMANCE_RATIO, map);
+        String uri = HttpRequestTools.getQueryUri(RestTools.FRONT_PERFORMANCE_RATIO, map);
         Object frontRsp = getFromFront(Integer.MAX_VALUE, frontIp, frontPort, uri, Object.class);
         return frontRsp;
     }
 
     public PerformanceConfig getPerformanceConfig(String frontIp, Integer frontPort) {
         Integer groupId = Integer.MAX_VALUE;
-        return getFromFront(groupId, frontIp, frontPort, FrontRestTools.FRONT_PERFORMANCE_CONFIG,
+        return getFromFront(groupId, frontIp, frontPort, RestTools.FRONT_PERFORMANCE_CONFIG,
                 PerformanceConfig.class);
     }
 
     public List<GroupSizeInfo> getGroupSizeInfos(String frontIp, Integer frontPort) {
         Integer groupId = Integer.MAX_VALUE;
         String result = getFromFront(groupId, frontIp, frontPort,
-                FrontRestTools.URI_GET_GROUP_SIZE_INFOS, String.class);
+                RestTools.URI_GET_GROUP_SIZE_INFOS, String.class);
         List<GroupSizeInfo> list =
                 JacksonUtils.stringToObj(result, new TypeReference<List<GroupSizeInfo>>() {});
         return list;
@@ -252,12 +252,12 @@ public class FrontInterfaceService {
                 "start requestFront. groupId:{} frontIp:{} frontPort:{} " + "httpMethod:{} uri:{}",
                 groupId, frontIp, frontPort, method.toString(), uri);
 
-        uri = FrontRestTools.uriAddGroupId(groupId, uri);
-        String url = String.format(FrontRestTools.FRONT_URL, frontIp, frontPort, uri);
+        uri = RestTools.uriAddGroupId(groupId, uri);
+        String url = String.format(RestTools.FRONT_URL, frontIp, frontPort, uri);
         log.debug("requestFront. url:{}", url);
 
         try {
-            HttpEntity entity = FrontRestTools.buildHttpEntity(param);// build entity
+            HttpEntity entity = RestTools.buildHttpEntity(param);// build entity
             ResponseEntity<T> response = restTemplate.exchange(url, method, entity, clazz);
             return response.getBody();
         } catch (ResourceAccessException e) {

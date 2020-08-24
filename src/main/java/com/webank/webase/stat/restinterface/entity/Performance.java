@@ -11,18 +11,21 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.frontinterface.entity;
+package com.webank.webase.stat.restinterface.entity;
 
+import java.math.BigDecimal;
 import lombok.Data;
 
 /**
- * entity of TxGasData
+ * entity of Performance
  */
 @Data
-public class TxGasData {
+public class Performance {
     private Long id;
-    private String transHash;
-    private Long gasUsed;
-    private Integer groupId;
+    private BigDecimal cpuUseRatio;
+    private BigDecimal diskUseRatio;
+    private BigDecimal memoryUseRatio;
+    private BigDecimal rxbps;
+    private BigDecimal txbps;
     private Long timestamp;
 }

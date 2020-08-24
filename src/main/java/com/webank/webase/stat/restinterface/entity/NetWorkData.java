@@ -11,17 +11,18 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.frontinterface.entity;
+package com.webank.webase.stat.restinterface.entity;
 
 import lombok.Data;
 
 /**
- * entity of GroupSizeInfo
+ * entity of NetWorkData
  */
 @Data
-public class GroupSizeInfo {
-    private int groupId;
-    private String groupName;
-    private String path;
-    private long size;
+public class NetWorkData {
+    private Long id;
+    private Long totalIn;
+    private Long totalOut;
+    private Integer groupId;
+    private Long timestamp;
 }
