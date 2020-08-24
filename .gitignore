@@ -24,3 +24,7 @@ hs_err_pid*
 # ide
 .gradle
 .idea
+/build/
+/out/
+
+application-test.yml
