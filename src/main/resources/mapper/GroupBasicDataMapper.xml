@@ -10,6 +10,8 @@
 			property="id" />
 		<result column="front_id" javaType="java.lang.Integer"
 			jdbcType="INTEGER" property="frontId" />
+		<result column="chain_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="chainId" />
 		<result column="group_id" javaType="java.lang.Integer"
 			jdbcType="INTEGER" property="groupId" />
 		<result column="size" javaType="java.lang.Long" jdbcType="BIGINT"
@@ -28,15 +30,21 @@
 
 	<insert id="add" parameterType="com.webank.webase.stat.data.entity.TbGroupBasicData">
 		insert into
-		tb_group_basic_data_#{frontId}
-		(front_id,group_id,size,trans_count,comment,create_time,modify_time,record_month)
-		values(#{frontId},#{groupId},#{size},#{transCount},#{comment},NOW(),NOW(),#{recordMonth})
+		tb_group_basic_data
+		(front_id,chain_id,group_id,size,trans_count,comment,create_time,modify_time,record_month)
+		values(#{frontId},#{chainId},#{groupId},#{size},#{transCount},#{comment},NOW(),NOW(),#{recordMonth})
 	</insert>
 
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from
-		tb_group_basic_data_#{frontId}
+		tb_group_basic_data
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="groupId != null">
 			and group_id = #{groupId}
 		</if>
@@ -50,8 +58,14 @@
 
 	<select id="getList" resultMap="basicResultMap">
 		select * from
-		tb_group_basic_data_#{frontId}
+		tb_group_basic_data
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="groupId != null">
 			and group_id = #{groupId}
 		</if>

@@ -9,6 +9,8 @@
 			property="frontId" />
 		<id column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER"
 			property="groupId" />
+		<result column="chain_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="chainId" />
 		<result column="description" javaType="java.lang.String"
 			jdbcType="VARCHAR" property="description" />
 		<result column="create_time" javaType="java.time.LocalDateTime"
@@ -18,13 +20,16 @@
 	</resultMap>
 
 	<insert id="add" parameterType="com.webank.webase.stat.group.entity.TbGroup">
-		insert ignore into tb_group
-		(front_id,group_id,description,create_time,modify_time)
-		values(#{frontId},#{groupId},#{description},NOW(),NOW())
+		insert into tb_group
+		(front_id,chain_id,group_id,description,create_time,modify_time)
+		values(#{frontId},#{chainId},#{groupId},#{description},NOW(),NOW())
 	</insert>
 
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from tb_group where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>
@@ -32,6 +37,9 @@
 
 	<select id="getList" resultMap="basicResultMap">
 		select * from tb_group where 1=1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>

@@ -10,6 +10,8 @@
 			property="id" />
 		<result column="front_id" javaType="java.lang.Integer"
 			jdbcType="INTEGER" property="frontId" />
+		<result column="chain_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="chainId" />
 		<result column="cpu_use_ratio" javaType="java.math.BigDecimal"
 			jdbcType="DECIMAL" property="cpuUseRatio" />
 		<result column="disk_use_ratio" javaType="java.math.BigDecimal"
@@ -29,22 +31,28 @@
 	<insert id="add"
 		parameterType="com.webank.webase.stat.data.entity.TbServerPerformance">
 		insert into
-		tb_server_performance_#{frontId}
-		(id,front_id,cpu_use_ratio,disk_use_ratio,memory_use_ratio,rxbps,txbps,timestamp,record_month)
-		values(#{id},#{frontId},#{cpuUseRatio},#{diskUseRatio},#{memoryUseRatio},#{rxbps},#{txbps},#{timestamp},#{recordMonth})
+		tb_server_performance
+		(id,front_id,chain_id,cpu_use_ratio,disk_use_ratio,memory_use_ratio,rxbps,txbps,timestamp,record_month)
+		values(#{id},#{frontId},#{chainId},#{cpuUseRatio},#{diskUseRatio},#{memoryUseRatio},#{rxbps},#{txbps},#{timestamp},#{recordMonth})
 	</insert>
 
 	<select id="getMaxData" resultMap="basicResultMap">
 		select * from
-		tb_server_performance_#{frontId}
+		tb_server_performance
 		where id = (select max(id) from
-		tb_server_performance_#{frontId})
+		tb_server_performance where front_id = #{frontId} and chain_id = #{chainId})
 	</select>
 
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from
-		tb_server_performance_#{frontId}
+		tb_server_performance
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="beginDate != null">
 			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
 		</if>
@@ -57,6 +65,12 @@
 		select * from
 		tb_server_performance_#{frontId}
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="beginDate != null">
 			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
 		</if>

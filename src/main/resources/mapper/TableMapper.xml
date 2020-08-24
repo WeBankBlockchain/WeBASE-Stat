@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.webank.webase.stat.table.TableMapper">
+
 	<update id="createTbFront">
 		CREATE TABLE IF NOT EXISTS tb_front (
 		front_id int(11) NOT NULL COMMENT '前置编号',
@@ -25,7 +26,7 @@
 	<update id="createTbGroup">
 		CREATE TABLE IF NOT EXISTS tb_group (
 		front_id int(11) NOT NULL COMMENT '前置编号',
-		chain_id int(11) DEFAULT NULL COMMENT '链编号',
+		chain_id int(11) NOT NULL COMMENT '链编号',
 		group_id int(11) NOT NULL COMMENT '群组编号',
 		description varchar(256) COMMENT '描述',
 		create_time datetime DEFAULT NULL COMMENT '创建时间',
@@ -36,9 +37,10 @@
 	</update>
 
 	<update id="createTbGroupBasicData">
-		CREATE TABLE IF NOT EXISTS ${tableName} (
+		CREATE TABLE IF NOT EXISTS tb_group_basic_data (
 		id bigint NOT NULL AUTO_INCREMENT COMMENT '自增编号',
 		front_id int(11) NOT NULL COMMENT '前置编号',
+		chain_id int(11) NOT NULL COMMENT '链编号',
 		group_id int(11) NOT NULL COMMENT '群组编号',
 		size bigint NOT NULL COMMENT '群组物理大小',
 		trans_count bigint NOT NULL COMMENT '群组交易量',
@@ -46,52 +48,25 @@
 		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
 		create_time datetime DEFAULT NULL COMMENT '创建时间',
 		modify_time datetime DEFAULT NULL COMMENT '修改时间',
-		PRIMARY KEY (id)
+		PRIMARY KEY (id,record_month)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群组基本数据表'
 		PARTITION BY RANGE (record_month) (
 		PARTITION p_default VALUES LESS THAN MAXVALUE
 		);
 	</update>
 
-	<update id="createTbNetworkData">
-		CREATE TABLE IF NOT EXISTS ${tableName} (
-		id bigint NOT NULL COMMENT '编号',
-		front_id int(11) NOT NULL COMMENT '前置编号',
-		group_id int(11) NOT NULL COMMENT '群组编号',
-		total_in bigint NOT NULL COMMENT '总入流量（P2P_InBytes + SDK_InBytes）',
-		total_out bigint NOT NULL COMMENT '总出流量（P2P_OutBytes + SDK_OutBytes）',
-		timestamp bigint NOT NULL COMMENT '统计时间',
-		PRIMARY KEY (id),
-		INDEX idx_group (group_id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8
-		COMMENT='网络统计日志数据表';
-	</update>
-
-	<update id="createTbGasData">
-		CREATE TABLE IF NOT EXISTS ${tableName} (
-		id bigint NOT NULL COMMENT '编号',
-		front_id int(11) NOT NULL COMMENT '前置编号',
-		group_id int(11) NOT NULL COMMENT '群组编号',
-		trans_hash varchar(128) NOT NULL COMMENT '交易hash',
-		gas_used bigint NOT NULL COMMENT '交易消耗的gas',
-		timestamp bigint NOT NULL COMMENT '统计时间',
-		PRIMARY KEY (id),
-		INDEX idx_group (group_id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8
-		COMMENT='交易Gas统计日志数据表';
-	</update>
-
 	<update id="createTbNodeMonitor">
-		CREATE TABLE IF NOT EXISTS ${tableName} (
+		CREATE TABLE IF NOT EXISTS tb_node_monitor (
 		id bigint NOT NULL COMMENT '编号',
 		front_id int(11) NOT NULL COMMENT '前置编号',
+		chain_id int(11) NOT NULL COMMENT '链编号',
 		group_id int(11) NOT NULL COMMENT '群组编号',
 		block_height bigint NOT NULL COMMENT '块高',
 		pbft_view bigint NOT NULL COMMENT 'view',
 		pending_transaction_count int(11) NOT NULL COMMENT '待交易数',
 		timestamp bigint NOT NULL COMMENT '统计时间',
 		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
-		PRIMARY KEY (id),
+		PRIMARY KEY (id,record_month),
 		INDEX idx_group (group_id)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置节点监控数据表'
 		PARTITION BY RANGE (record_month) (
@@ -100,9 +75,10 @@
 	</update>
 
 	<update id="createTbServerPerformance">
-		CREATE TABLE IF NOT EXISTS ${tableName} (
+		CREATE TABLE IF NOT EXISTS tb_server_performance (
 		id bigint NOT NULL COMMENT '编号',
 		front_id int(11) NOT NULL COMMENT '前置编号',
+		chain_id int(11) NOT NULL COMMENT '链编号',
 		cpu_use_ratio decimal NOT NULL COMMENT 'cpu利用率',
 		disk_use_ratio decimal NOT NULL COMMENT '硬盘利用率',
 		memory_use_ratio decimal NOT NULL COMMENT '内存利用率',
@@ -110,7 +86,7 @@
 		txbps decimal NOT NULL COMMENT '下行bandwith',
 		timestamp bigint NOT NULL COMMENT '统计时间',
 		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
-		PRIMARY KEY (id)
+		PRIMARY KEY (id,record_month)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置服务器性能数据表'
 		 PARTITION BY RANGE (record_month) (
 		 PARTITION p_default VALUES LESS THAN MAXVALUE
