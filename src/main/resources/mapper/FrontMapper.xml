@@ -6,6 +6,8 @@
 	<resultMap id="basicResultMap" type="com.webank.webase.stat.front.entity.TbFront">
 		<id column="front_id" javaType="java.lang.Integer" jdbcType="INTEGER"
 			property="frontId" />
+		<result column="chain_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="chainId" />
 		<result column="front_ip" javaType="java.lang.String" jdbcType="VARCHAR"
 			property="frontIp" />
 		<result column="front_port" javaType="java.lang.Integer"
@@ -32,9 +34,9 @@
 
 	<insert id="add">
 		insert into tb_front
-		(front_id,front_ip,front_port,memory_total_size,memory_used_size,cpu_size,cpu_amount,
+		(front_id,chain_id,front_ip,front_port,memory_total_size,memory_used_size,cpu_size,cpu_amount,
 		disk_total_size,disk_used_size,description,create_time,modify_time)
-		values(#{frontId},#{frontIp},#{frontPort},#{memoryTotalSize},#{memoryUsedSize}
+		values(#{frontId},#{chainId},#{frontIp},#{frontPort},#{memoryTotalSize},#{memoryUsedSize}
 		,#{cpuSize},#{cpuAmount},#{diskTotalSize},#{diskUsedSize},#{description},NOW(),NOW())
 		ON DUPLICATE KEY UPDATE
 		memory_total_size=#{memoryTotalSize},memory_used_size=#{memoryUsedSize},
@@ -46,6 +48,9 @@
 		parameterType="com.webank.webase.stat.front.entity.FrontParam">
 		select count(1) from tb_front
 		where 1=1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>
@@ -61,6 +66,9 @@
 		parameterType="com.webank.webase.stat.front.entity.FrontParam">
 		select * from tb_front
 		where 1=1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>

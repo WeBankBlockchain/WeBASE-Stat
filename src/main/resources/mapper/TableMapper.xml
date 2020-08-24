@@ -5,6 +5,7 @@
 	<update id="createTbFront">
 		CREATE TABLE IF NOT EXISTS tb_front (
 		front_id int(11) NOT NULL COMMENT '前置编号',
+		chain_id int(11) NOT NULL COMMENT '链编号',
 		front_ip varchar(16) NOT NULL COMMENT '前置服务ip',
 		front_port int(11) DEFAULT NULL COMMENT '前置服务端口',
 		memory_total_size varchar(16) NOT NULL COMMENT '内存总量（单位：KB）',
@@ -16,7 +17,8 @@
 		description varchar(1024) COMMENT '描述',
 		create_time datetime DEFAULT NULL COMMENT '创建时间',
 		modify_time datetime DEFAULT NULL COMMENT '修改时间',
-		PRIMARY KEY (front_id)
+		PRIMARY KEY (front_id),
+		UNIQUE unique_chain_front (front_id, chain_id)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置信息表';
 	</update>
 

@@ -27,4 +27,5 @@ public class ReqNewFront {
     @NotNull
     private Integer frontPort;
     private String description;
+    private Integer chainId;
 }
