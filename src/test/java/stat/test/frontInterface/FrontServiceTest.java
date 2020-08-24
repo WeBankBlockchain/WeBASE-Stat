@@ -14,7 +14,7 @@
 package stat.test.frontInterface;
 
 import com.webank.webase.stat.Application;
-import com.webank.webase.stat.frontinterface.FrontInterfaceService;
+import com.webank.webase.stat.restinterface.FrontInterfaceService;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
