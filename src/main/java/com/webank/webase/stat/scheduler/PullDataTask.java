@@ -15,15 +15,10 @@ package com.webank.webase.stat.scheduler;
 
 import com.webank.webase.stat.base.properties.ConstantProperties;
 import com.webank.webase.stat.base.tools.CommonUtils;
-import com.webank.webase.stat.data.entity.TbGasData;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
-import com.webank.webase.stat.data.entity.TbNetWorkData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
-import com.webank.webase.stat.data.enums.LogTypes;
-import com.webank.webase.stat.data.mapper.GasDataMapper;
 import com.webank.webase.stat.data.mapper.GroupBasicDataMapper;
-import com.webank.webase.stat.data.mapper.NetWorkDataMapper;
 import com.webank.webase.stat.data.mapper.NodeMonitorMapper;
 import com.webank.webase.stat.data.mapper.ServerPerformanceMapper;
 import com.webank.webase.stat.front.FrontService;
@@ -31,10 +26,8 @@ import com.webank.webase.stat.front.entity.TbFront;
 import com.webank.webase.stat.front.entity.TransactionCount;
 import com.webank.webase.stat.restinterface.FrontInterfaceService;
 import com.webank.webase.stat.restinterface.entity.GroupSizeInfo;
-import com.webank.webase.stat.restinterface.entity.NetWorkData;
 import com.webank.webase.stat.restinterface.entity.NodeMonitor;
 import com.webank.webase.stat.restinterface.entity.Performance;
-import com.webank.webase.stat.restinterface.entity.TxGasData;
 import com.webank.webase.stat.group.FrontGroupMapCache;
 import com.webank.webase.stat.group.entity.TbGroup;
 import java.time.Duration;
@@ -60,10 +53,6 @@ public class PullDataTask {
     private FrontInterfaceService frontInterfaceService;
     @Autowired
     private GroupBasicDataMapper groupBasicDataMapper;
-    @Autowired
-    private NetWorkDataMapper netWorkDataMapper;
-    @Autowired
-    private GasDataMapper gasDataMapper;
     @Autowired
     private NodeMonitorMapper nodeMonitorMapper;
     @Autowired
@@ -193,6 +182,7 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullGroupBasicDataByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             Integer frontId = front.getFrontId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
@@ -218,7 +208,7 @@ public class PullDataTask {
                     }
                 }
                 // save data
-                groupBasicDataMapper.add(new TbGroupBasicData(frontId, groupId, size,
+                groupBasicDataMapper.add(new TbGroupBasicData(chainId, frontId, groupId, size,
                     transactionCount.getTxSum().longValue(), null,
                     CommonUtils.getYearMonth(LocalDateTime.now())));
             }
@@ -235,6 +225,7 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullNodeMonitorByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             Integer frontId = front.getFrontId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
@@ -253,7 +244,7 @@ public class PullDataTask {
                 List<NodeMonitor> list = frontInterfaceService.getNodeMonitor(frontIp, frontPort,
                     groupId, constantProperties.getPageSize(), 1, beginDate, null);
                 for (NodeMonitor data : list) {
-                    nodeMonitorMapper.add(new TbNodeMonitor(data.getId(), front.getFrontId(),
+                    nodeMonitorMapper.add(new TbNodeMonitor(data.getId(), chainId, front.getFrontId(),
                         groupId, data.getBlockHeight(), data.getPbftView(),
                         data.getPendingTransactionCount(), data.getTimestamp(),
                         CommonUtils.getYearMonth(data.getTimestamp())));
@@ -272,6 +263,7 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullServerPerformanceByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
             // save data
@@ -285,7 +277,7 @@ public class PullDataTask {
             List<Performance> list = frontInterfaceService.getServerPerformance(frontIp, frontPort,
                 constantProperties.getPageSize(), 1, beginDate, null);
             for (Performance data : list) {
-                serverPerformanceMapper.add(new TbServerPerformance(data.getId(),
+                serverPerformanceMapper.add(new TbServerPerformance(data.getId(), chainId,
                     front.getFrontId(), data.getCpuUseRatio(), data.getDiskUseRatio(),
                     data.getMemoryUseRatio(), data.getRxbps(), data.getTxbps(),
                     data.getTimestamp(), CommonUtils.getYearMonth(data.getTimestamp())));

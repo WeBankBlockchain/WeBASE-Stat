@@ -26,6 +26,7 @@ public class TbGroupBasicData {
 
     private Long id;
     private Integer frontId;
+    private Integer chainId;
     private Integer groupId;
     private Long size;
     private Long transCount;
@@ -34,8 +35,9 @@ public class TbGroupBasicData {
     private LocalDateTime modifyTime;
     private Integer recordMonth;
 
-    public TbGroupBasicData(Integer frontId, Integer groupId, Long size, Long transCount,
+    public TbGroupBasicData(Integer chainId, Integer frontId, Integer groupId, Long size, Long transCount,
             String comment, Integer recordMonth) {
+        this.chainId = chainId;
         this.frontId = frontId;
         this.groupId = groupId;
         this.size = size;

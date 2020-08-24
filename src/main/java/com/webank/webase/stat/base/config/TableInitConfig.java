@@ -15,6 +15,7 @@
 package com.webank.webase.stat.base.config;
 
 import com.webank.webase.stat.table.TableMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,18 @@ import org.springframework.context.annotation.Configuration;
  * table init.
  *
  */
+@Log4j2
 @Configuration
 public class TableInitConfig implements InitializingBean {
     @Autowired
     private TableMapper tableMapper;
-
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
+        log.info("init tables.");
         tableMapper.createTbFront();
         tableMapper.createTbGroup();
+        tableMapper.createTbGroupBasicData();
+        tableMapper.createTbNodeMonitor();
+        tableMapper.createTbServerPerformance();
     }
 }

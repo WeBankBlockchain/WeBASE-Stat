@@ -107,10 +107,8 @@ public class FrontService {
         // save group
         for (String groupId : groupIdList) {
             groupService
-                    .saveGroup(new TbGroup(tbFront.getFrontId(), Integer.valueOf(groupId), null));
+                    .saveGroup(new TbGroup(chainId, tbFront.getFrontId(), Integer.valueOf(groupId), null));
         }
-        // create tables by frontId
-        tableService.createTable(frontId);
 
         return getById(frontId);
     }
@@ -216,7 +214,5 @@ public class FrontService {
         frontMapper.removeById(frontId);
         // remove group
         groupService.removeByFrontId(frontId);
-        // drop tables
-        tableService.dropTable(frontId);
     }
 }

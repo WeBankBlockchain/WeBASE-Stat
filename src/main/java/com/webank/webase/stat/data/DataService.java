@@ -14,14 +14,10 @@
 package com.webank.webase.stat.data;
 
 import com.webank.webase.stat.base.entity.BaseQueryParam;
-import com.webank.webase.stat.data.entity.TbGasData;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
-import com.webank.webase.stat.data.entity.TbNetWorkData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
-import com.webank.webase.stat.data.mapper.GasDataMapper;
 import com.webank.webase.stat.data.mapper.GroupBasicDataMapper;
-import com.webank.webase.stat.data.mapper.NetWorkDataMapper;
 import com.webank.webase.stat.data.mapper.NodeMonitorMapper;
 import com.webank.webase.stat.data.mapper.ServerPerformanceMapper;
 import java.util.List;
@@ -35,10 +31,6 @@ import org.springframework.stereotype.Service;
 public class DataService {
     @Autowired
     private GroupBasicDataMapper groupBasicDataMapper;
-    @Autowired
-    private NetWorkDataMapper netWorkDataMapper;
-    @Autowired
-    private GasDataMapper gasDataMapper;
     @Autowired
     private NodeMonitorMapper nodeMonitorMapper;
     @Autowired

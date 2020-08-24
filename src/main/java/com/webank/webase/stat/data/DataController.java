@@ -18,9 +18,7 @@ import com.webank.webase.stat.base.controller.BaseController;
 import com.webank.webase.stat.base.entity.BasePageResponse;
 import com.webank.webase.stat.base.entity.BaseQueryParam;
 import com.webank.webase.stat.base.exception.BaseException;
-import com.webank.webase.stat.data.entity.TbGasData;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
-import com.webank.webase.stat.data.entity.TbNetWorkData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
 import com.webank.webase.stat.front.FrontService;
@@ -53,6 +51,7 @@ public class DataController extends BaseController {
 
     @GetMapping(value = "/groupBasicData")
     public BasePageResponse getGroupBasicDataList(@RequestParam(required = true) Integer frontId,
+            @RequestParam(required = false) Integer chainId,
             @RequestParam(required = false) Integer groupId,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "1") Integer pageNumber,
@@ -74,6 +73,7 @@ public class DataController extends BaseController {
         // param
         BaseQueryParam queryParam = new BaseQueryParam();
         queryParam.setFrontId(frontId);
+        queryParam.setChainId(chainId);
         queryParam.setGroupId(groupId);
         queryParam.setBeginDate(beginDate);
         queryParam.setEndDate(endDate);
@@ -95,6 +95,7 @@ public class DataController extends BaseController {
 
     @GetMapping(value = "/nodeMonitor")
     public BasePageResponse getNodeMonitorList(@RequestParam(required = true) Integer frontId,
+            @RequestParam(required = false) Integer chainId,
             @RequestParam(required = false) Integer groupId,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "1") Integer pageNumber,
@@ -115,6 +116,7 @@ public class DataController extends BaseController {
         BasePageResponse pagesponse = new BasePageResponse(ConstantCode.SUCCESS);
         // param
         BaseQueryParam queryParam = new BaseQueryParam();
+        queryParam.setChainId(chainId);
         queryParam.setFrontId(frontId);
         queryParam.setGroupId(groupId);
         queryParam.setBeginDate(beginDate);
@@ -137,6 +139,7 @@ public class DataController extends BaseController {
 
     @GetMapping(value = "/serverPerformance")
     public BasePageResponse getServerPerformanceList(@RequestParam(required = true) Integer frontId,
+            @RequestParam(required = false) Integer chainId,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "1") Integer pageNumber,
             @RequestParam(required = false) @DateTimeFormat(
@@ -156,6 +159,7 @@ public class DataController extends BaseController {
         BasePageResponse pagesponse = new BasePageResponse(ConstantCode.SUCCESS);
         // param
         BaseQueryParam queryParam = new BaseQueryParam();
+        queryParam.setChainId(chainId);
         queryParam.setFrontId(frontId);
         queryParam.setBeginDate(beginDate);
         queryParam.setEndDate(endDate);

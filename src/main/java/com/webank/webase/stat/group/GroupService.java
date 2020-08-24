@@ -96,7 +96,7 @@ public class GroupService {
             }
             // save group
             for (String groupId : groupIdList) {
-                saveGroup(new TbGroup(front.getFrontId(), Integer.valueOf(groupId), null));
+                saveGroup(new TbGroup(front.getChainId(), front.getFrontId(), Integer.valueOf(groupId), null));
             }
             // check group
             checkAndRemoveInvalidGroup(front.getFrontId(), groupIdList);
