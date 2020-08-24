@@ -32,13 +32,15 @@ public class TbGroupBasicData {
     private String comment;
     private LocalDateTime createTime;
     private LocalDateTime modifyTime;
+    private Integer recordMonth;
 
     public TbGroupBasicData(Integer frontId, Integer groupId, Long size, Long transCount,
-            String comment) {
+            String comment, Integer recordMonth) {
         this.frontId = frontId;
         this.groupId = groupId;
         this.size = size;
         this.transCount = transCount;
         this.comment = comment;
+        this.recordMonth = recordMonth;
     }
 }

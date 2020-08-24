@@ -32,9 +32,10 @@ public class TbNodeMonitor {
     private BigInteger pbftView;
     private BigInteger pendingTransactionCount;
     private Long timestamp;
+    private Integer recordMonth;
 
     public TbNodeMonitor(Long id, Integer frontId, Integer groupId, BigInteger blockHeight,
-            BigInteger pbftView, BigInteger pendingTransactionCount, Long timestamp) {
+            BigInteger pbftView, BigInteger pendingTransactionCount, Long timestamp, Integer recordMonth) {
         this.id = id;
         this.frontId = frontId;
         this.groupId = groupId;
@@ -42,5 +43,6 @@ public class TbNodeMonitor {
         this.pbftView = pbftView;
         this.pendingTransactionCount = pendingTransactionCount;
         this.timestamp = timestamp;
+        this.recordMonth = recordMonth;
     }
 }
