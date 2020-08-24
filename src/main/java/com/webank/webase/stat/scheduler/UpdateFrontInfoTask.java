@@ -20,10 +20,12 @@ import com.webank.webase.stat.restinterface.ChainMgrInterfaceService;
 import com.webank.webase.stat.restinterface.entity.IpPortInfo;
 import com.webank.webase.stat.restinterface.entity.RspChain;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 public class UpdateFrontInfoTask {
 
@@ -36,6 +38,9 @@ public class UpdateFrontInfoTask {
 
     @Scheduled(fixedDelayString = "${constant.updateFrontInfoInterval}", initialDelay = 1000)
     public void taskStart() {
+        // fetch front list
+        pullFrontList();
+        // update front size info
         frontService.updateFrontInfo();
     }
 
@@ -43,11 +48,13 @@ public class UpdateFrontInfoTask {
      * get chain list and pull frontList by chain
      */
     private void pullFrontList() {
+        log.info("start pullFrontList");
         IpPortInfo ipPortInfo = HttpRequestTools.getIpPort(constants.getChainMgrServer());
         String mgrIp = ipPortInfo.getIp();
         Integer mgrPort = ipPortInfo.getPort();
         List<RspChain> chainList = chainMgrInterfaceService.getChainListFromMgr(mgrIp, mgrPort);
         chainList.forEach(chain ->
             frontService.pullFrontList(chain.getChainId(), mgrIp, mgrPort));
+        log.info("end pullFrontList");
     }
 }

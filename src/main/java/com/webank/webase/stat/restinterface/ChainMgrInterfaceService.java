@@ -45,6 +45,7 @@ public class ChainMgrInterfaceService {
     private RestTemplate restTemplate;
 
     public List<RspChain> getChainListFromMgr(String chainMgrIp, Integer chainMgrPort) {
+        log.info("getChainListFromMgr chainMgrIp:{},chainMgrPort:{}", chainMgrIp, chainMgrPort);
         String uri = String.format(RestTools.CHAIN_MGR_URI_CHAIN_LIST);
         BaseResponse response = getFromChainMgr(chainMgrIp, chainMgrPort, uri, BaseResponse.class);
         List<RspChain> list =
@@ -54,6 +55,7 @@ public class ChainMgrInterfaceService {
     }
 
     public List<RspFront> getFrontListFromMgr(Integer chainId, String chainMgrIp, Integer chainMgrPort) {
+        log.info("getFrontListFromMgr chainMgrIp:{},chainMgrPort:{},chainId:{}", chainMgrIp, chainMgrPort,chainId);
         String uri = String.format(RestTools.CHAIN_MGR_URI_FRONT_LIST, chainId);
         BaseResponse response = getFromChainMgr(chainMgrIp, chainMgrPort, uri, BaseResponse.class);
         List<RspFront> list =
