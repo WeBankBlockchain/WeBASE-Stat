@@ -13,7 +13,13 @@
  */
 package com.webank.webase.stat.scheduler;
 
+import com.webank.webase.stat.base.properties.ConstantProperties;
+import com.webank.webase.stat.base.tools.HttpRequestTools;
 import com.webank.webase.stat.front.FrontService;
+import com.webank.webase.stat.restinterface.ChainMgrInterfaceService;
+import com.webank.webase.stat.restinterface.entity.IpPortInfo;
+import com.webank.webase.stat.restinterface.entity.RspChain;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,9 +29,25 @@ public class UpdateFrontInfoTask {
 
     @Autowired
     private FrontService frontService;
+    @Autowired
+    private ConstantProperties constants;
+    @Autowired
+    private ChainMgrInterfaceService chainMgrInterfaceService;
 
     @Scheduled(fixedDelayString = "${constant.updateFrontInfoInterval}", initialDelay = 1000)
     public void taskStart() {
         frontService.updateFrontInfo();
+    }
+
+    /**
+     * get chain list and pull frontList by chain
+     */
+    private void pullFrontList() {
+        IpPortInfo ipPortInfo = HttpRequestTools.getIpPort(constants.getChainMgrServer());
+        String mgrIp = ipPortInfo.getIp();
+        Integer mgrPort = ipPortInfo.getPort();
+        List<RspChain> chainList = chainMgrInterfaceService.getChainListFromMgr(mgrIp, mgrPort);
+        chainList.forEach(chain ->
+            frontService.pullFrontList(chain.getChainId(), mgrIp, mgrPort));
     }
 }
