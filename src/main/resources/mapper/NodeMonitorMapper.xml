@@ -20,13 +20,15 @@
 			jdbcType="BIGINT" property="pendingTransactionCount" />
 		<result column="timestamp" javaType="java.lang.Long" jdbcType="BIGINT"
 			property="timestamp" />
+		<result column="record_month" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="recordMonth" />
 	</resultMap>
 
 	<insert id="add" parameterType="com.webank.webase.stat.data.entity.TbNodeMonitor">
 		insert into
 		tb_node_monitor_#{frontId}
-		(id,front_id,group_id,block_height,pbft_view,pending_transaction_count,timestamp)
-		values(#{id},#{frontId},#{groupId},#{blockHeight},#{pbftView},#{pendingTransactionCount},#{timestamp})
+		(id,front_id,group_id,block_height,pbft_view,pending_transaction_count,timestamp,record_month)
+		values(#{id},#{frontId},#{groupId},#{blockHeight},#{pbftView},#{pendingTransactionCount},#{timestamp},#{recordMonth})
 	</insert>
 
 	<select id="getMaxData" resultMap="basicResultMap">

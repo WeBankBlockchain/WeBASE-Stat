@@ -25,6 +25,7 @@
 	<update id="createTbGroup">
 		CREATE TABLE IF NOT EXISTS tb_group (
 		front_id int(11) NOT NULL COMMENT '前置编号',
+		chain_id int(11) DEFAULT NULL COMMENT '链编号',
 		group_id int(11) NOT NULL COMMENT '群组编号',
 		description varchar(256) COMMENT '描述',
 		create_time datetime DEFAULT NULL COMMENT '创建时间',
@@ -42,10 +43,14 @@
 		size bigint NOT NULL COMMENT '群组物理大小',
 		trans_count bigint NOT NULL COMMENT '群组交易量',
 		comment varchar(256) COMMENT '备注',
+		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
 		create_time datetime DEFAULT NULL COMMENT '创建时间',
 		modify_time datetime DEFAULT NULL COMMENT '修改时间',
 		PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群组基本数据表';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群组基本数据表'
+		PARTITION BY RANGE (record_month) (
+		PARTITION p_default VALUES LESS THAN MAXVALUE
+		);
 	</update>
 
 	<update id="createTbNetworkData">
@@ -85,10 +90,13 @@
 		pbft_view bigint NOT NULL COMMENT 'view',
 		pending_transaction_count int(11) NOT NULL COMMENT '待交易数',
 		timestamp bigint NOT NULL COMMENT '统计时间',
+		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
 		PRIMARY KEY (id),
 		INDEX idx_group (group_id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8
-		COMMENT='前置节点监控数据表';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置节点监控数据表'
+		PARTITION BY RANGE (record_month) (
+		PARTITION p_default VALUES LESS THAN MAXVALUE
+		);
 	</update>
 
 	<update id="createTbServerPerformance">
@@ -101,8 +109,12 @@
 		rxbps decimal NOT NULL COMMENT '上行bandwith',
 		txbps decimal NOT NULL COMMENT '下行bandwith',
 		timestamp bigint NOT NULL COMMENT '统计时间',
+		record_month int(11) NOT NULL COMMENT '统计时间，年份加月份，如202008',
 		PRIMARY KEY (id)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置服务器性能数据表';
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='前置服务器性能数据表'
+		 PARTITION BY RANGE (record_month) (
+		 PARTITION p_default VALUES LESS THAN MAXVALUE
+		);
 	</update>
 
 	<update id="dropTable">

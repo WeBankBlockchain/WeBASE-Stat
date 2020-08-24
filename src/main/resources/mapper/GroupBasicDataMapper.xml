@@ -22,13 +22,15 @@
 			jdbcType="TIMESTAMP" property="createTime" />
 		<result column="modify_time" javaType="java.time.LocalDateTime"
 			jdbcType="TIMESTAMP" property="modifyTime" />
+		<result column="record_month" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="recordMonth" />
 	</resultMap>
 
 	<insert id="add" parameterType="com.webank.webase.stat.data.entity.TbGroupBasicData">
 		insert into
 		tb_group_basic_data_#{frontId}
-		(front_id,group_id,size,trans_count,comment,create_time,modify_time)
-		values(#{frontId},#{groupId},#{size},#{transCount},#{comment},NOW(),NOW())
+		(front_id,group_id,size,trans_count,comment,create_time,modify_time,record_month)
+		values(#{frontId},#{groupId},#{size},#{transCount},#{comment},NOW(),NOW(),#{recordMonth})
 	</insert>
 
 	<select id="getCount" resultType="java.lang.Integer">

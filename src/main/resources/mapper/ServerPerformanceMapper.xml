@@ -22,14 +22,16 @@
 			jdbcType="DECIMAL" property="txbps" />
 		<result column="timestamp" javaType="java.lang.Long" jdbcType="BIGINT"
 			property="timestamp" />
+		<result column="record_month" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="recordMonth" />
 	</resultMap>
 
 	<insert id="add"
 		parameterType="com.webank.webase.stat.data.entity.TbServerPerformance">
 		insert into
 		tb_server_performance_#{frontId}
-		(id,front_id,cpu_use_ratio,disk_use_ratio,memory_use_ratio,rxbps,txbps,timestamp)
-		values(#{id},#{frontId},#{cpuUseRatio},#{diskUseRatio},#{memoryUseRatio},#{rxbps},#{txbps},#{timestamp})
+		(id,front_id,cpu_use_ratio,disk_use_ratio,memory_use_ratio,rxbps,txbps,timestamp,record_month)
+		values(#{id},#{frontId},#{cpuUseRatio},#{diskUseRatio},#{memoryUseRatio},#{rxbps},#{txbps},#{timestamp},#{recordMonth})
 	</insert>
 
 	<select id="getMaxData" resultMap="basicResultMap">
