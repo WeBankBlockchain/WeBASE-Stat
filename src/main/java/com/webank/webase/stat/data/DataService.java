@@ -61,34 +61,6 @@ public class DataService {
     /**
      * query count.
      */
-    public Integer countOfNetWorkData(BaseQueryParam queryParam) {
-        return netWorkDataMapper.getCount(queryParam);
-    }
-
-    /**
-     * query list.
-     */
-    public List<TbNetWorkData> getNetWorkDataList(BaseQueryParam queryParam) {
-        return netWorkDataMapper.getList(queryParam);
-    }
-
-    /**
-     * query count.
-     */
-    public Integer countOfGasData(BaseQueryParam queryParam) {
-        return gasDataMapper.getCount(queryParam);
-    }
-
-    /**
-     * query list.
-     */
-    public List<TbGasData> getGasDataList(BaseQueryParam queryParam) {
-        return gasDataMapper.getList(queryParam);
-    }
-
-    /**
-     * query count.
-     */
     public Integer countOfNodeMonitor(BaseQueryParam queryParam) {
         return nodeMonitorMapper.getCount(queryParam);
     }
