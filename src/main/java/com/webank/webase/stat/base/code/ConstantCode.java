@@ -42,6 +42,13 @@ public class ConstantCode {
     public static final RetCode REQUEST_NODE_EXCEPTION =
             RetCode.mark(205004, "request node exception");
 
+    /* rest error code */
+    public static final RetCode REST_SERVER_ADDRESS_NOT_CONFIG = RetCode.mark(205050, "rest chain manager server address not config");
+    public static final RetCode REQUEST_CHAIN_MGR_FAIL =
+        RetCode.mark(205002, "request chain manager fail, please check chain manager");
+    public static final RetCode REQUEST_CHAIN_MGR_EXCEPTION =
+        RetCode.mark(205002, "request chain manager exception");
+
     /* param exception */
     public static final RetCode PARAM_EXCEPTION = RetCode.mark(305000, "param exception");
 

@@ -14,6 +14,9 @@
 package com.webank.webase.stat.base.tools;
 
 
+import com.webank.webase.stat.base.code.ConstantCode;
+import com.webank.webase.stat.base.exception.BaseException;
+import com.webank.webase.stat.restinterface.entity.IpPortInfo;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -53,5 +56,21 @@ public class HttpRequestTools {
                 .queryParams(params).build();
 
         return uriHead + uriComponents.toString();
+    }
+
+    /**
+     * get first ip port in rest properties
+     * ex: 127.0.0.1:6003,127.0.0.1:6004, get previous one
+     * @param ipPort
+     * @return
+     */
+    public static IpPortInfo getIpPort(String ipPort) {
+        String[] ipAndPort = ipPort.trim().split(":");
+        if (ipAndPort.length < 2) {
+            throw new BaseException(ConstantCode.REST_SERVER_ADDRESS_NOT_CONFIG);
+        }
+        String ip = ipAndPort[0];
+        int port = Integer.parseInt(ipAndPort[1]);
+        return new IpPortInfo(ip, port);
     }
 }

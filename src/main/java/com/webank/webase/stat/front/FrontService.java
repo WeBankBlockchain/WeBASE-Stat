@@ -19,10 +19,12 @@ import com.webank.webase.stat.base.tools.CommonUtils;
 import com.webank.webase.stat.front.entity.FrontParam;
 import com.webank.webase.stat.front.entity.ReqNewFront;
 import com.webank.webase.stat.front.entity.TbFront;
-import com.webank.webase.stat.frontinterface.FrontInterfaceService;
-import com.webank.webase.stat.frontinterface.entity.PerformanceConfig;
+import com.webank.webase.stat.restinterface.ChainMgrInterfaceService;
+import com.webank.webase.stat.restinterface.FrontInterfaceService;
+import com.webank.webase.stat.restinterface.entity.PerformanceConfig;
 import com.webank.webase.stat.group.GroupService;
 import com.webank.webase.stat.group.entity.TbGroup;
+import com.webank.webase.stat.restinterface.entity.RspFront;
 import com.webank.webase.stat.table.TableService;
 import java.time.Duration;
 import java.time.Instant;
@@ -53,6 +55,24 @@ public class FrontService {
     private GroupService groupService;
     @Autowired
     private FrontInterfaceService frontInterfaceService;
+    @Autowired
+    private ChainMgrInterfaceService chainMgrInterfaceService;
+
+    /**
+     * pull front list by chainId
+     */
+    public synchronized void pullFrontList(Integer chainId, String mgrIp, Integer mgrPort) {
+        log.info("start pullFrontList chainId:{},mgrIp:{},mgrPort:{}", chainId, mgrIp, mgrPort);
+        List<RspFront> frontList = chainMgrInterfaceService.getFrontListFromMgr(chainId, mgrIp, mgrPort);
+        int count = 0;
+        for(RspFront front: frontList) {
+            ReqNewFront newFront = new ReqNewFront();
+            BeanUtils.copyProperties(front, newFront);
+            this.newFront(newFront);
+            count++;
+        }
+        log.info("end pullFrontList count:{}", count);
+    }
 
     /**
      * add new front
@@ -60,8 +80,9 @@ public class FrontService {
     @Transactional
     public TbFront newFront(ReqNewFront reqNewFront) {
         // check frontId
+        Integer chainId = reqNewFront.getChainId();
         Integer frontId = reqNewFront.getFrontId();
-        if (checkFrontIdExists(frontId)) {
+        if (checkFrontIdExists(chainId, frontId)) {
             throw new BaseException(ConstantCode.FRONT_EXISTS);
         }
 
@@ -150,6 +171,18 @@ public class FrontService {
             return false;
         }
         return true;
+    }
+
+
+    public boolean checkFrontIdExists(Integer chainId, Integer frontId) {
+        FrontParam param = new FrontParam();
+        param.setChainId(chainId);
+        param.setFrontId(frontId);
+        int count = getFrontCount(param);
+        if (count > 0) {
+            return true;
+        }
+        return false;
     }
 
     public boolean checkIpPortExists(String frontIp, Integer frontPort) {

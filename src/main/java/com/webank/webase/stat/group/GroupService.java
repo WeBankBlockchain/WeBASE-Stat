@@ -15,7 +15,7 @@ package com.webank.webase.stat.group;
 
 import com.webank.webase.stat.front.FrontService;
 import com.webank.webase.stat.front.entity.TbFront;
-import com.webank.webase.stat.frontinterface.FrontInterfaceService;
+import com.webank.webase.stat.restinterface.FrontInterfaceService;
 import com.webank.webase.stat.group.entity.TbGroup;
 import java.time.Duration;
 import java.time.Instant;
