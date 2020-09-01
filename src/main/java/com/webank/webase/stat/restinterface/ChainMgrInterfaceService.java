@@ -20,11 +20,14 @@ import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.entity.BasePageResponse;
 import com.webank.webase.stat.base.entity.BaseResponse;
 import com.webank.webase.stat.base.exception.BaseException;
+import com.webank.webase.stat.base.tools.HttpRequestTools;
 import com.webank.webase.stat.base.tools.JacksonUtils;
 import com.webank.webase.stat.restinterface.entity.NetWorkData;
 import com.webank.webase.stat.restinterface.entity.RspChain;
 import com.webank.webase.stat.restinterface.entity.RspFront;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -56,7 +59,11 @@ public class ChainMgrInterfaceService {
 
     public List<RspFront> getFrontListFromMgr(Integer chainId, String chainMgrIp, Integer chainMgrPort) {
         log.info("getFrontListFromMgr chainMgrIp:{},chainMgrPort:{},chainId:{}", chainMgrIp, chainMgrPort,chainId);
-        String uri = String.format(RestTools.CHAIN_MGR_URI_FRONT_LIST, chainId);
+        Map<String, String> map = new HashMap<>();
+        if (chainId != null) {
+            map.put("beginDate", String.valueOf(chainId));
+        }
+        String uri = HttpRequestTools.getQueryUri(RestTools.CHAIN_MGR_URI_FRONT_LIST, map);
         BaseResponse response = getFromChainMgr(chainMgrIp, chainMgrPort, uri, BaseResponse.class);
         List<RspFront> list =
             JacksonUtils.stringToObj(JacksonUtils.objToString(response.getData()),

@@ -48,7 +48,7 @@ public class RestTools {
     /* chain manager rest */
     public static final String CHAIN_MANAGER_URL = "http://%1s:%2d/WeBASE-Chain-Manager/%3s";
     public static final String CHAIN_MGR_URI_CHAIN_LIST = "chain/all";
-    public static final String CHAIN_MGR_URI_FRONT_LIST = "front/list/%1s";
+    public static final String CHAIN_MGR_URI_FRONT_LIST = "front/find";
 
     // 不需要在url中包含groupId的
     private static final List<String> URI_NOT_CONTAIN_GROUP_ID =
