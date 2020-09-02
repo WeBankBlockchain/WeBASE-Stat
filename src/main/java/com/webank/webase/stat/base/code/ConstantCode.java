@@ -51,5 +51,6 @@ public class ConstantCode {
 
     /* param exception */
     public static final RetCode PARAM_EXCEPTION = RetCode.mark(305000, "param exception");
+    public static final RetCode GAP_PARAM_ERROR = RetCode.mark(305001, "gap cannot be 0");
 
 }
