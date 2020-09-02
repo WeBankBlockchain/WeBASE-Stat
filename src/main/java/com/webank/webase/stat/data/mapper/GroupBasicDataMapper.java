@@ -14,6 +14,7 @@
 package com.webank.webase.stat.data.mapper;
 
 import com.webank.webase.stat.base.entity.BaseQueryParam;
+import com.webank.webase.stat.data.entity.ReqGroupBasicParam;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -32,10 +33,10 @@ public interface GroupBasicDataMapper {
     /**
      * getCount.
      */
-    int getCount(BaseQueryParam queryParam);
+    int getCount(ReqGroupBasicParam queryParam);
 
     /**
      * getList.
      */
-    List<TbGroupBasicData> getList(BaseQueryParam queryParam);
+    List<TbGroupBasicData> getList(ReqGroupBasicParam queryParam);
 }

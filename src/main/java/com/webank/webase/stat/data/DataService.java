@@ -16,6 +16,7 @@ package com.webank.webase.stat.data;
 import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.entity.BaseQueryParam;
 import com.webank.webase.stat.base.exception.BaseException;
+import com.webank.webase.stat.data.entity.ReqGroupBasicParam;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
@@ -275,14 +276,14 @@ public class DataService {
     /**
      * query count.
      */
-    public Integer countOfGroupBasicData(BaseQueryParam queryParam) {
+    public Integer countOfGroupBasicData(ReqGroupBasicParam queryParam) {
         return groupBasicDataMapper.getCount(queryParam);
     }
 
     /**
      * query list.
      */
-    public List<TbGroupBasicData> getGroupBasicDataList(BaseQueryParam queryParam) {
+    public List<TbGroupBasicData> getGroupBasicDataList(ReqGroupBasicParam queryParam) {
         return groupBasicDataMapper.getList(queryParam);
     }
 

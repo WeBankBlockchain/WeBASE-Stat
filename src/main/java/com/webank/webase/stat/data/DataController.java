@@ -21,6 +21,7 @@ import com.webank.webase.stat.base.entity.BasePageResponse;
 import com.webank.webase.stat.base.entity.BaseQueryParam;
 import com.webank.webase.stat.base.entity.BaseResponse;
 import com.webank.webase.stat.base.exception.BaseException;
+import com.webank.webase.stat.data.entity.ReqGroupBasicParam;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
@@ -150,12 +151,12 @@ public class DataController extends BaseController {
 
         BasePageResponse pagesponse = new BasePageResponse(ConstantCode.SUCCESS);
         // param
-        BaseQueryParam queryParam = new BaseQueryParam();
+        ReqGroupBasicParam queryParam = new ReqGroupBasicParam();
         queryParam.setFrontId(frontId);
         queryParam.setChainId(chainId);
         queryParam.setGroupId(groupId);
-        queryParam.setBeginDate(beginDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        queryParam.setEndDate(endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        queryParam.setBeginDate(beginDate);
+        queryParam.setEndDate(endDate);
         queryParam.setPageSize(pageSize);
         Integer count = dataService.countOfGroupBasicData(queryParam);
         if (count != null && count > 0) {
