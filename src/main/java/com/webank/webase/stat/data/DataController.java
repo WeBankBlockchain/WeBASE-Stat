@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiOperation;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
@@ -153,8 +154,8 @@ public class DataController extends BaseController {
         queryParam.setFrontId(frontId);
         queryParam.setChainId(chainId);
         queryParam.setGroupId(groupId);
-        queryParam.setBeginDate(beginDate);
-        queryParam.setEndDate(endDate);
+        queryParam.setBeginDate(beginDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        queryParam.setEndDate(endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         queryParam.setPageSize(pageSize);
         Integer count = dataService.countOfGroupBasicData(queryParam);
         if (count != null && count > 0) {
@@ -162,8 +163,8 @@ public class DataController extends BaseController {
                     Optional.ofNullable(pageNumber).map(page -> (page - 1) * pageSize).orElse(null);
             queryParam.setStart(start);
 
-            List<TbGroupBasicData> listOfnode = dataService.getGroupBasicDataList(queryParam);
-            pagesponse.setData(listOfnode);
+            List<TbGroupBasicData> listOfNode = dataService.getGroupBasicDataList(queryParam);
+            pagesponse.setData(listOfNode);
             pagesponse.setTotalCount(count);
         }
         log.info("end getGroupBasicDataList. usedTime:{}",
@@ -197,8 +198,8 @@ public class DataController extends BaseController {
         queryParam.setChainId(chainId);
         queryParam.setFrontId(frontId);
         queryParam.setGroupId(groupId);
-        queryParam.setBeginDate(beginDate);
-        queryParam.setEndDate(endDate);
+        queryParam.setBeginDate(beginDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        queryParam.setEndDate(endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         queryParam.setPageSize(pageSize);
         Integer count = dataService.countOfNodeMonitor(queryParam);
         if (count != null && count > 0) {
@@ -239,8 +240,8 @@ public class DataController extends BaseController {
         BaseQueryParam queryParam = new BaseQueryParam();
         queryParam.setChainId(chainId);
         queryParam.setFrontId(frontId);
-        queryParam.setBeginDate(beginDate);
-        queryParam.setEndDate(endDate);
+        queryParam.setBeginDate(beginDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        queryParam.setEndDate(endDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         queryParam.setPageSize(pageSize);
         Integer count = dataService.countOfServerPerformance(queryParam);
         if (count != null && count > 0) {

@@ -27,6 +27,7 @@ import com.webank.webase.stat.data.response.LineDataList;
 import com.webank.webase.stat.data.response.MetricData;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
@@ -332,8 +333,8 @@ public class DataService {
         param.setChainId(chainId);
         param.setFrontId(frontId);
         param.setGroupId(groupId);
-        param.setBeginDate(startTime);
-        param.setEndDate(endTime);
+        param.setBeginDate(startTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        param.setEndDate(endTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         return param;
     }
 }
