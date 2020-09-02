@@ -63,7 +63,7 @@
 
 	<select id="getList" resultMap="basicResultMap">
 		select * from
-		tb_server_performance_#{frontId}
+		tb_server_performance
 		where 1 = 1
 		<if test="chainId != null">
 			and chain_id = #{chainId}

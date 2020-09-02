@@ -27,7 +27,7 @@
 
 	<select id="findOne" resultMap="basicResultMap">
 		select * from tb_group where
-		groupId = #{groupId}
+		group_id = #{groupId}
 		and
 		front_id = #{frontId}
 	</select>
