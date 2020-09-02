@@ -70,10 +70,10 @@
 			and group_id = #{groupId}
 		</if>
 		<if test="beginDate != null">
-			<![CDATA[and create_time >= #{beginDate}]]>
+			<![CDATA[and UNIX_TIMESTAMP(#{create_time})*1000 >= #{beginDate}]]>
 		</if>
 		<if test="endDate != null">
-			<![CDATA[and create_time <= #{endDate}]]>
+			<![CDATA[and UNIX_TIMESTAMP(#{create_time})*1000 < #{endDate}]]>
 		</if>
 		<!-- <![CDATA[and DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(#{endDate},'%Y-%m-%d 
 			%H:%i:%s')]]> -->

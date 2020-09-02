@@ -54,10 +54,10 @@
 			and front_id = #{frontId}
 		</if>
 		<if test="beginDate != null">
-			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+			and <![CDATA[ timestamp >= #{beginDate} ]]>
 		</if>
 		<if test="endDate != null">
-			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+			and <![CDATA[ timestamp < #{endDate}  ]]>
 		</if>
 	</select>
 
@@ -72,10 +72,10 @@
 			and front_id = #{frontId}
 		</if>
 		<if test="beginDate != null">
-			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+			and <![CDATA[ timestamp >= #{beginDate} ]]>
 		</if>
 		<if test="endDate != null">
-			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+			and <![CDATA[ timestamp < #{endDate}  ]]>
 		</if>
 		order by id asc
 		<if test="start != null and pageSize != null">
