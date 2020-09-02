@@ -19,6 +19,7 @@ import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.controller.BaseController;
 import com.webank.webase.stat.base.entity.BasePageResponse;
 import com.webank.webase.stat.base.entity.BaseQueryParam;
+import com.webank.webase.stat.base.entity.BaseResponse;
 import com.webank.webase.stat.base.exception.BaseException;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
@@ -67,7 +68,7 @@ public class DataController extends BaseController {
         @ApiImplicitParam(name = "contrastEndDate", value = "对比结束时间"),
         @ApiImplicitParam(name = "gap", value = "时间间隔", dataType = "int")})
     @GetMapping("/metrics/nodeMonitor")
-    public List<MetricData> getNodeMonitorMetrics(
+    public BaseResponse getNodeMonitorMetrics(
         @RequestParam(required = false) @DateTimeFormat(
             iso = DATE_TIME) LocalDateTime beginDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DATE_TIME) LocalDateTime endDate,
@@ -83,23 +84,16 @@ public class DataController extends BaseController {
         log.info("getChainMonitor start. groupId:[{}]", groupId,
             startTime.toEpochMilli());
 
-        List<MetricData> performanceList = dataService.findNodeMonitorListByTime(chainId, frontId,
+        List<MetricData> metricDataList = dataService.findNodeMonitorListByTime(chainId, frontId,
             groupId, beginDate, endDate, contrastBeginDate, contrastEndDate, gap);
 
         log.info("getChainMonitor end. useTime:{}",
             Duration.between(startTime, Instant.now()).toMillis());
-        return performanceList;
+        return new BaseResponse(ConstantCode.SUCCESS, metricDataList);
     }
 
     /**
      * query performance data.
-     *
-     * @param beginDate beginDate
-     * @param endDate endDate
-     * @param contrastBeginDate contrastBeginDate
-     * @param contrastEndDate contrastEndDate
-     * @param gap gap
-     * @return
      */
     @ApiOperation(value = "query performance data", notes = "query performance data")
     @ApiImplicitParams({@ApiImplicitParam(name = "beginDate", value = "start time"),
@@ -111,7 +105,7 @@ public class DataController extends BaseController {
         @ApiImplicitParam(name = "chainId", value = "chain id", dataType = "int")
     })
     @GetMapping("/metrics/serverPerformance")
-    public List<MetricData> getPerformanceRatio(
+    public BaseResponse getPerformanceRatio(
         @RequestParam(required = false) @DateTimeFormat(
             iso = DATE_TIME) LocalDateTime beginDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DATE_TIME) LocalDateTime endDate,
@@ -124,11 +118,11 @@ public class DataController extends BaseController {
         @RequestParam(required = false) Integer chainId) throws Exception {
         Instant startTime = Instant.now();
         log.info("getPerformanceRatio start.", startTime.toEpochMilli());
-        List<MetricData> performanceList = dataService.findServerPerformanceByTime(chainId, frontId,
+        List<MetricData> metricDataList = dataService.findServerPerformanceByTime(chainId, frontId,
             beginDate, endDate, contrastBeginDate, contrastEndDate, gap);
         log.info("getPerformanceRatio end. useTime:{}",
             Duration.between(startTime, Instant.now()).toMillis());
-        return performanceList;
+        return new BaseResponse(ConstantCode.SUCCESS, metricDataList);;
     }
 
     /* raw statistic data */
