@@ -235,7 +235,7 @@ public class PullDataTask {
             for (TbGroup tbGroup : tbGroups) {
                 Integer groupId = tbGroup.getGroupId();
                 TbNodeMonitor tbNodeMonitor =
-                    nodeMonitorMapper.getMaxData(front.getFrontId(), groupId);
+                    nodeMonitorMapper.getMaxData(front.getChainId(), front.getFrontId(), groupId);
                 LocalDateTime beginDate = null;
                 if (!ObjectUtils.isEmpty(tbNodeMonitor)) {
                     beginDate =
@@ -268,7 +268,7 @@ public class PullDataTask {
             Integer frontPort = front.getFrontPort();
             // save data
             TbServerPerformance tbServerPerformance =
-                serverPerformanceMapper.getMaxData(front.getFrontId());
+                serverPerformanceMapper.getMaxData(front.getChainId(), front.getFrontId());
             LocalDateTime beginDate = null;
             if (!ObjectUtils.isEmpty(tbServerPerformance)) {
                 beginDate =

@@ -33,7 +33,7 @@ public interface ServerPerformanceMapper {
     /**
      * getList.
      */
-    TbServerPerformance getMaxData(@Param("frontId") Integer frontId);
+    TbServerPerformance getMaxData(@Param("chainId") Integer chainId, @Param("frontId") Integer frontId);
 
     /**
      * getCount.
