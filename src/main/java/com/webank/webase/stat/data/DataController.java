@@ -66,7 +66,7 @@ public class DataController extends BaseController {
         @ApiImplicitParam(name = "contrastBeginDate", value = "对比开始时间"),
         @ApiImplicitParam(name = "contrastEndDate", value = "对比结束时间"),
         @ApiImplicitParam(name = "gap", value = "时间间隔", dataType = "int")})
-    @GetMapping
+    @GetMapping("/metrics/nodeMonitor")
     public List<MetricData> getNodeMonitorMetrics(
         @RequestParam(required = false) @DateTimeFormat(
             iso = DATE_TIME) LocalDateTime beginDate,
@@ -110,7 +110,7 @@ public class DataController extends BaseController {
         @ApiImplicitParam(name = "frontId", value = "front id", dataType = "int"),
         @ApiImplicitParam(name = "chainId", value = "chain id", dataType = "int")
     })
-    @GetMapping
+    @GetMapping("/metrics/serverPerformance")
     public List<MetricData> getPerformanceRatio(
         @RequestParam(required = false) @DateTimeFormat(
             iso = DATE_TIME) LocalDateTime beginDate,
