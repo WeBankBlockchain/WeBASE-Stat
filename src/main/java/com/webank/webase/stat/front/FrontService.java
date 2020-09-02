@@ -103,9 +103,9 @@ public class FrontService {
         // check front ip and port
         String frontIp = reqNewFront.getFrontIp();
         Integer frontPort = reqNewFront.getFrontPort();
-        if (checkIpPortExists(frontIp, frontPort)) {
-            throw new BaseException(ConstantCode.FRONT_EXISTS);
-        }
+//        if (checkIpPortExists(frontIp, frontPort)) {
+//            throw new BaseException(ConstantCode.FRONT_EXISTS);
+//        }
         CommonUtils.checkServerConnect(frontIp, frontPort);
 
         // query front info
