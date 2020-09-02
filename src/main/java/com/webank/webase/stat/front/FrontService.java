@@ -29,6 +29,7 @@ import com.webank.webase.stat.table.TableService;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +62,30 @@ public class FrontService {
     /**
      * pull front list by chainId
      */
-    public synchronized void pullFrontList(Integer chainId, String mgrIp, Integer mgrPort) {
-        log.info("start pullFrontList chainId:{},mgrIp:{},mgrPort:{}", chainId, mgrIp, mgrPort);
-        List<RspFront> frontList = chainMgrInterfaceService.getFrontListFromMgr(chainId, mgrIp, mgrPort);
-        int count = 0;
-        for(RspFront front: frontList) {
-            ReqNewFront newFront = new ReqNewFront();
-            BeanUtils.copyProperties(front, newFront);
-            this.newFront(newFront);
-            count++;
+    @Async("asyncExecutor")
+    public synchronized void pullFrontList(CountDownLatch latch, Integer chainId, String mgrIp, Integer mgrPort) {
+        try {
+            log.info("start pullFrontList chainId:{},mgrIp:{},mgrPort:{}", chainId, mgrIp, mgrPort);
+            List<RspFront> frontList = chainMgrInterfaceService.getFrontListFromMgr(chainId, mgrIp, mgrPort);
+            log.debug("pullFrontList getFrontListFromMgr:{}", frontList);
+            int count = 0;
+            for(RspFront front: frontList) {
+                if (checkFrontIdExists(chainId, front.getFrontId())) {
+                    log.debug("front exist, jump over insert front, chainId:{}frontId:{}",
+                        chainId, front.getFrontId());
+                    continue;
+                }
+                ReqNewFront newFront = new ReqNewFront();
+                BeanUtils.copyProperties(front, newFront);
+                this.newFront(newFront);
+                count++;
+            }
+            log.info("end pullFrontList count:{}", count);
+        } catch (Exception ex) {
+            log.error("fail pullFrontList. chainId:{} ", chainId, ex);
+        } finally {
+            latch.countDown();
         }
-        log.info("end pullFrontList count:{}", count);
     }
 
     /**

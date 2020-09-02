@@ -27,9 +27,6 @@
 
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from tb_group where 1 = 1
-		<if test="chainId != null">
-			and chain_id = #{chainId}
-		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>
@@ -37,9 +34,6 @@
 
 	<select id="getList" resultMap="basicResultMap">
 		select * from tb_group where 1=1
-		<if test="chainId != null">
-			and chain_id = #{chainId}
-		</if>
 		<if test="frontId != null">
 			and front_id = #{frontId}
 		</if>
