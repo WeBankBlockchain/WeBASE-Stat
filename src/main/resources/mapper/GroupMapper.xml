@@ -25,6 +25,13 @@
 		values(#{frontId},#{chainId},#{groupId},#{description},NOW(),NOW())
 	</insert>
 
+	<select id="findOne" resultMap="basicResultMap">
+		select * from tb_group where
+		groupId = #{groupId}
+		and
+		front_id = #{frontId}
+	</select>
+
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from tb_group where 1 = 1
 		<if test="frontId != null">

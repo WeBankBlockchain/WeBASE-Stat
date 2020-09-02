@@ -84,6 +84,7 @@ public class GroupService {
         }
         // get group from chain
         for (TbFront front : frontList) {
+            int frontId = front.getFrontId();
             String frontIp = front.getFrontIp();
             int frontPort = front.getFrontPort();
             // query group list
@@ -95,8 +96,12 @@ public class GroupService {
                 continue;
             }
             // save group
-            for (String groupId : groupIdList) {
-                saveGroup(new TbGroup(front.getChainId(), front.getFrontId(), Integer.valueOf(groupId), null));
+            for (String gId : groupIdList) {
+                int groupId = Integer.parseInt(gId);
+                // check group exist
+                if (!isGroupExist(frontId, groupId)) {
+                    saveGroup(new TbGroup(front.getChainId(), frontId, groupId, null));
+                }
             }
             // check group
             checkAndRemoveInvalidGroup(front.getFrontId(), groupIdList);
@@ -147,4 +152,8 @@ public class GroupService {
         }
     }
 
+    private boolean isGroupExist(Integer frontId, Integer groupId) {
+        TbGroup checkGroup = groupMapper.findOne(frontId, groupId);
+        return checkGroup != null;
+    }
 }
