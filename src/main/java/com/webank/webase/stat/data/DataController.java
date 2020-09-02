@@ -122,7 +122,7 @@ public class DataController extends BaseController {
             beginDate, endDate, contrastBeginDate, contrastEndDate, gap);
         log.info("getPerformanceRatio end. useTime:{}",
             Duration.between(startTime, Instant.now()).toMillis());
-        return new BaseResponse(ConstantCode.SUCCESS, metricDataList);;
+        return new BaseResponse(ConstantCode.SUCCESS, metricDataList);
     }
 
     /* raw statistic data */
