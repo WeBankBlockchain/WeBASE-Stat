@@ -121,7 +121,7 @@ public class FrontService {
         // save group
         for (String groupId : groupIdList) {
             groupService
-                    .saveGroup(new TbGroup(chainId, tbFront.getFrontId(), Integer.valueOf(groupId), null));
+                    .saveGroup(new TbGroup(chainId, frontId, Integer.valueOf(groupId), null));
         }
 
         return getById(frontId);
