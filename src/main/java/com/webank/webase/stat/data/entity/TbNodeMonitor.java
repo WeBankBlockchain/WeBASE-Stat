@@ -35,9 +35,8 @@ public class TbNodeMonitor {
     private Long timestamp;
     private Integer recordMonth;
 
-    public TbNodeMonitor(Long id, Integer chainId, Integer frontId, Integer groupId, BigInteger blockHeight,
+    public TbNodeMonitor(Integer chainId, Integer frontId, Integer groupId, BigInteger blockHeight,
             BigInteger pbftView, BigInteger pendingTransactionCount, Long timestamp, Integer recordMonth) {
-        this.id = id;
         this.chainId = chainId;
         this.frontId = frontId;
         this.groupId = groupId;

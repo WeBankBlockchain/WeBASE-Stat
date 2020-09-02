@@ -36,10 +36,9 @@ public class TbServerPerformance {
     private Long timestamp;
     private Integer recordMonth;
 
-    public TbServerPerformance(Long id, Integer chainId, Integer frontId, BigDecimal cpuUseRatio,
+    public TbServerPerformance(Integer chainId, Integer frontId, BigDecimal cpuUseRatio,
             BigDecimal diskUseRatio, BigDecimal memoryUseRatio, BigDecimal rxbps, BigDecimal txbps,
             Long timestamp, Integer recordMonth) {
-        this.id = id;
         this.chainId = chainId;
         this.frontId = frontId;
         this.cpuUseRatio = cpuUseRatio;

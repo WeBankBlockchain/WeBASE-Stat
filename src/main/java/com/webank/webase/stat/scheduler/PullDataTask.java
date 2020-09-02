@@ -244,7 +244,7 @@ public class PullDataTask {
                 List<NodeMonitor> list = frontInterfaceService.getNodeMonitor(frontIp, frontPort,
                     groupId, constantProperties.getPageSize(), 1, beginDate, null);
                 for (NodeMonitor data : list) {
-                    nodeMonitorMapper.add(new TbNodeMonitor(data.getId(), chainId, front.getFrontId(),
+                    nodeMonitorMapper.add(new TbNodeMonitor(chainId, front.getFrontId(),
                         groupId, data.getBlockHeight(), data.getPbftView(),
                         data.getPendingTransactionCount(), data.getTimestamp(),
                         CommonUtils.getYearMonth(data.getTimestamp())));
@@ -277,7 +277,7 @@ public class PullDataTask {
             List<Performance> list = frontInterfaceService.getServerPerformance(frontIp, frontPort,
                 constantProperties.getPageSize(), 1, beginDate, null);
             for (Performance data : list) {
-                serverPerformanceMapper.add(new TbServerPerformance(data.getId(), chainId,
+                serverPerformanceMapper.add(new TbServerPerformance(chainId,
                     front.getFrontId(), data.getCpuUseRatio(), data.getDiskUseRatio(),
                     data.getMemoryUseRatio(), data.getRxbps(), data.getTxbps(),
                     data.getTimestamp(), CommonUtils.getYearMonth(data.getTimestamp())));
