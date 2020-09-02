@@ -68,8 +68,8 @@ public class DataService {
             contrastMonitorList = this.getNodeMonitorList(chainId, frontId, groupId,
                 contrastStartTime, contrastEndTime);
         }
-        return transferToNodeMonitorMetricData(transferListByGap(monitorList, gap),
-            transferListByGap(contrastMonitorList, gap));
+        return transferToNodeMonitorMetricData(transferMonitorListByGap(monitorList, gap),
+            transferMonitorListByGap(contrastMonitorList, gap));
     }
 
     /**
@@ -90,10 +90,95 @@ public class DataService {
             contrastPerformanceList = this.getServerPerformanceList(chainId, frontId,
                 contrastStartTime, contrastEndTime);
         }
-        return transferToPerformanceData(transferListByGap(performanceList, gap),
-            transferListByGap(contrastPerformanceList, gap));
+        return transferToPerformanceData(transferPerformanceListByGap(performanceList, gap),
+            transferPerformanceListByGap(contrastPerformanceList, gap));
     }
 
+    /**
+     * process node monitor / server performance contrast metric data
+     */
+    // start of node monitor contrast
+    private List<MetricData> transferToNodeMonitorMetricData(List<TbNodeMonitor> monitorList,
+        List<TbNodeMonitor> contrastMonitorList) {
+        List<Long> timestampList = new ArrayList<>();
+        List<BigDecimal> blockHeightValueList = new ArrayList<>();
+        List<BigDecimal> pbftViewValueList = new ArrayList<>();
+        List<BigDecimal> pendingCountValueList = new ArrayList<>();
+        for (TbNodeMonitor monitor : monitorList) {
+            blockHeightValueList.add(monitor.getBlockHeight() == null ? null
+                : new BigDecimal(monitor.getBlockHeight()));
+            pbftViewValueList.add(
+                monitor.getPbftView() == null ? null : new BigDecimal(monitor.getPbftView()));
+            pendingCountValueList.add(monitor.getPendingTransactionCount() == null ? null
+                : new BigDecimal(monitor.getPendingTransactionCount()));
+            timestampList.add(monitor.getTimestamp());
+        }
+        monitorList.clear();
+
+        List<Long> contrastTimestampList = new ArrayList<>();
+        List<BigDecimal> contrastBlockHeightValueList = new ArrayList<>();
+        List<BigDecimal> contrastPbftViewValueList = new ArrayList<>();
+        List<BigDecimal> contrastPendingCountValueList = new ArrayList<>();
+        for (TbNodeMonitor monitor : contrastMonitorList) {
+            contrastBlockHeightValueList.add(monitor.getBlockHeight() == null ? null
+                : new BigDecimal(monitor.getBlockHeight()));
+            contrastPbftViewValueList.add(
+                monitor.getPbftView() == null ? null : new BigDecimal(monitor.getPbftView()));
+            contrastPendingCountValueList.add(monitor.getPendingTransactionCount() == null ? null
+                : new BigDecimal(monitor.getPendingTransactionCount()));
+            contrastTimestampList.add(monitor.getTimestamp());
+        }
+        contrastMonitorList.clear();
+        List<MetricData> MetricDataList = new ArrayList<>();
+        MetricDataList.add(new MetricData("blockHeight",
+            new Data(new LineDataList(timestampList, blockHeightValueList),
+                new LineDataList(contrastTimestampList, contrastBlockHeightValueList))));
+        MetricDataList.add(
+            new MetricData("pbftView", new Data(new LineDataList(null, pbftViewValueList),
+                new LineDataList(null, contrastPbftViewValueList))));
+        MetricDataList.add(new MetricData("pendingCount",
+            new Data(new LineDataList(null, pendingCountValueList),
+                new LineDataList(null, contrastPendingCountValueList))));
+        return MetricDataList;
+    }
+
+    public List transferMonitorListByGap(List arrayList, int gap) {
+        if (gap == 0) {
+            throw new BaseException(ConstantCode.GAP_PARAM_ERROR);
+        }
+        List newMonitorList = this.fillNodeMonitorList(arrayList);
+        List ilist = new ArrayList<>();
+        int len = newMonitorList.size();
+        for (int i = 0; i < len; i = i + gap) {
+            ilist.add(newMonitorList.get(i));
+        }
+        return ilist;
+    }
+
+    private List<TbNodeMonitor> fillNodeMonitorList(List<TbNodeMonitor> monitorList) {
+        List<TbNodeMonitor> newMonitorList = new ArrayList<>();
+        for (int i = 0; i < monitorList.size() - 1; i++) {
+            Long startTime = monitorList.get(i).getTimestamp();
+            Long endTime = monitorList.get(i + 1).getTimestamp();
+            if (endTime - startTime > 10000) {
+                log.debug("****startTime" + startTime);
+                log.debug("****endTime" + endTime);
+                while (endTime - startTime > 5000) {
+                    TbNodeMonitor emptyMonitor = new TbNodeMonitor();
+                    emptyMonitor.setTimestamp(startTime + 5000);
+                    newMonitorList.add(emptyMonitor);
+                    log.debug("****insert" + startTime);
+                    startTime = startTime + 5000;
+                }
+            } else {
+                newMonitorList.add(monitorList.get(i));
+            }
+        }
+        return newMonitorList;
+    }
+    // end of node monitor contrast
+
+    // start of server performance contrast
 
     /**
      * process server performance contrast metric data
@@ -150,60 +235,11 @@ public class DataService {
         return performanceDataList;
     }
 
-
-    /**
-     * process node monitor contrast metric data
-     */
-    // start of node monitor contrast
-    private List<MetricData> transferToNodeMonitorMetricData(List<TbNodeMonitor> monitorList,
-        List<TbNodeMonitor> contrastMonitorList) {
-        List<Long> timestampList = new ArrayList<>();
-        List<BigDecimal> blockHeightValueList = new ArrayList<>();
-        List<BigDecimal> pbftViewValueList = new ArrayList<>();
-        List<BigDecimal> pendingCountValueList = new ArrayList<>();
-        for (TbNodeMonitor monitor : monitorList) {
-            blockHeightValueList.add(monitor.getBlockHeight() == null ? null
-                : new BigDecimal(monitor.getBlockHeight()));
-            pbftViewValueList.add(
-                monitor.getPbftView() == null ? null : new BigDecimal(monitor.getPbftView()));
-            pendingCountValueList.add(monitor.getPendingTransactionCount() == null ? null
-                : new BigDecimal(monitor.getPendingTransactionCount()));
-            timestampList.add(monitor.getTimestamp());
-        }
-        monitorList.clear();
-
-        List<Long> contrastTimestampList = new ArrayList<>();
-        List<BigDecimal> contrastBlockHeightValueList = new ArrayList<>();
-        List<BigDecimal> contrastPbftViewValueList = new ArrayList<>();
-        List<BigDecimal> contrastPendingCountValueList = new ArrayList<>();
-        for (TbNodeMonitor monitor : contrastMonitorList) {
-            contrastBlockHeightValueList.add(monitor.getBlockHeight() == null ? null
-                : new BigDecimal(monitor.getBlockHeight()));
-            contrastPbftViewValueList.add(
-                monitor.getPbftView() == null ? null : new BigDecimal(monitor.getPbftView()));
-            contrastPendingCountValueList.add(monitor.getPendingTransactionCount() == null ? null
-                : new BigDecimal(monitor.getPendingTransactionCount()));
-            contrastTimestampList.add(monitor.getTimestamp());
-        }
-        contrastMonitorList.clear();
-        List<MetricData> MetricDataList = new ArrayList<>();
-        MetricDataList.add(new MetricData("blockHeight",
-            new Data(new LineDataList(timestampList, blockHeightValueList),
-                new LineDataList(contrastTimestampList, contrastBlockHeightValueList))));
-        MetricDataList.add(
-            new MetricData("pbftView", new Data(new LineDataList(null, pbftViewValueList),
-                new LineDataList(null, contrastPbftViewValueList))));
-        MetricDataList.add(new MetricData("pendingCount",
-            new Data(new LineDataList(null, pendingCountValueList),
-                new LineDataList(null, contrastPendingCountValueList))));
-        return MetricDataList;
-    }
-
-    public List transferListByGap(List arrayList, int gap) {
+    public List transferPerformanceListByGap(List arrayList, int gap) {
         if (gap == 0) {
             throw new BaseException(ConstantCode.GAP_PARAM_ERROR);
         }
-        List newMonitorList = this.fillNodeMonitorList(arrayList);
+        List newMonitorList = this.fillPerformanceList(arrayList);
         List ilist = new ArrayList<>();
         int len = newMonitorList.size();
         for (int i = 0; i < len; i = i + gap) {
@@ -212,28 +248,28 @@ public class DataService {
         return ilist;
     }
 
-    private List<TbNodeMonitor> fillNodeMonitorList(List<TbNodeMonitor> monitorList) {
-        List<TbNodeMonitor> newMonitorList = new ArrayList<>();
-        for (int i = 0; i < monitorList.size() - 1; i++) {
-            Long startTime = monitorList.get(i).getTimestamp();
-            Long endTime = monitorList.get(i + 1).getTimestamp();
+    private List<TbServerPerformance> fillPerformanceList(List<TbServerPerformance> performanceList) {
+        List<TbServerPerformance> newPerformanceList = new ArrayList<>();
+        for (int i = 0; i < performanceList.size() - 1; i++) {
+            Long startTime = performanceList.get(i).getTimestamp();
+            Long endTime = performanceList.get(i + 1).getTimestamp();
             if (endTime - startTime > 10000) {
                 log.debug("****startTime" + startTime);
                 log.debug("****endTime" + endTime);
                 while (endTime - startTime > 5000) {
-                    TbNodeMonitor emptyMonitor = new TbNodeMonitor();
-                    emptyMonitor.setTimestamp(startTime + 5000);
-                    newMonitorList.add(emptyMonitor);
+                    TbServerPerformance emptyPerformance = new TbServerPerformance();
+                    emptyPerformance.setTimestamp(startTime + 5000);
+                    newPerformanceList.add(emptyPerformance);
                     log.debug("****insert" + startTime);
                     startTime = startTime + 5000;
                 }
             } else {
-                newMonitorList.add(monitorList.get(i));
+                newPerformanceList.add(performanceList.get(i));
             }
         }
-        return newMonitorList;
+        return newPerformanceList;
     }
-    // end of node monitor contrast
+    // end of server performance contrast
 
     /**
      * query count.
