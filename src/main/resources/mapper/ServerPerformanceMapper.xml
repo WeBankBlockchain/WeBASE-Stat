@@ -77,7 +77,7 @@
 		<if test="endDate != null">
 			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
 		</if>
-		order by id desc
+		order by id asc
 		<if test="start != null and pageSize != null">
 			limit #{start},#{pageSize}
 		</if>

@@ -77,7 +77,7 @@
 		</if>
 		<!-- <![CDATA[and DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(#{endDate},'%Y-%m-%d 
 			%H:%i:%s')]]> -->
-		order by id desc
+		order by id asc
 		<if test="start != null and pageSize != null">
 			limit #{start},#{pageSize}
 		</if>
