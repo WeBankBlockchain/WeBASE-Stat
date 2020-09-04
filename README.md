@@ -1,8 +1,4 @@
 # 数据统计服务子系统
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE/CONTRIBUTING.html)
-[![Code Lines](https://tokei.rs/b1/github/WeBankFinTech/WeBASE-Stat?category=code)](https://github.com/WeBankFinTech/WeBASE-Stat)
-[![license](http://img.shields.io/badge/license-Apache%20v2-blue.svg)](http://www.apache.org/licenses/)
-
 
 ## 简介
 ​	WeBASE-Stat为微众区块链中间件平台-数据统计服务子系统，统计数据服务以前置为基础，拉取CPU、内存、IO、群组大小、群组gas、群组网络流量的数据，记录数据库。主要包括以下模块：
