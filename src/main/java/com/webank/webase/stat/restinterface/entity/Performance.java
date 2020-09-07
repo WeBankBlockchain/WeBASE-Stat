@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -11,32 +11,21 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.data.entity;
+package com.webank.webase.stat.restinterface.entity;
 
+import java.math.BigDecimal;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * Entity class of table tb_gas_data.
+ * entity of Performance
  */
 @Data
-@NoArgsConstructor
-public class TbGasData {
-
+public class Performance {
     private Long id;
-    private Integer frontId;
-    private Integer groupId;
-    private String transHash;
-    private Long gasUsed;
+    private BigDecimal cpuUseRatio;
+    private BigDecimal diskUseRatio;
+    private BigDecimal memoryUseRatio;
+    private BigDecimal rxbps;
+    private BigDecimal txbps;
     private Long timestamp;
-
-    public TbGasData(Long id, Integer frontId, Integer groupId, String transHash, Long gasUsed,
-            Long timestamp) {
-        this.id = id;
-        this.frontId = frontId;
-        this.groupId = groupId;
-        this.transHash = transHash;
-        this.gasUsed = gasUsed;
-        this.timestamp = timestamp;
-    }
 }

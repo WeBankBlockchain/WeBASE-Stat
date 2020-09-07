@@ -21,6 +21,7 @@ import lombok.Data;
 @Data
 public class TbFront {
     private Integer frontId;
+    private Integer chainId;
     private String frontIp;
     private Integer frontPort;
     private String memoryTotalSize;

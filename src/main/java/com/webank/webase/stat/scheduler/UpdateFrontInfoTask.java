@@ -13,19 +13,51 @@
  */
 package com.webank.webase.stat.scheduler;
 
+import com.webank.webase.stat.base.properties.ConstantProperties;
+import com.webank.webase.stat.base.tools.HttpRequestTools;
 import com.webank.webase.stat.front.FrontService;
+import com.webank.webase.stat.restinterface.ChainMgrInterfaceService;
+import com.webank.webase.stat.restinterface.entity.IpPortInfo;
+import com.webank.webase.stat.restinterface.entity.RspChain;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 public class UpdateFrontInfoTask {
 
     @Autowired
     private FrontService frontService;
+    @Autowired
+    private ConstantProperties constants;
+    @Autowired
+    private ChainMgrInterfaceService chainMgrInterfaceService;
 
-    @Scheduled(fixedDelayString = "${constant.updateFrontInfoInterval}", initialDelay = 1000)
+    @Scheduled(fixedDelayString = "${constant.updateFrontInfoInterval}")
     public void taskStart() {
+        // fetch front list
+        pullFrontList();
+        // update front size info
         frontService.updateFrontInfo();
+    }
+
+    /**
+     * get chain list and pull frontList by chain
+     */
+    private void pullFrontList() {
+        log.info("start pullFrontList");
+        IpPortInfo ipPortInfo = HttpRequestTools.getIpPort(constants.getChainMgrServer());
+        String mgrIp = ipPortInfo.getIp();
+        Integer mgrPort = ipPortInfo.getPort();
+        List<RspChain> chainList = chainMgrInterfaceService.getChainListFromMgr(mgrIp, mgrPort);
+        log.debug("pullFrontList getChainListFromMgr:{}", chainList);
+        CountDownLatch latch = new CountDownLatch(chainList.size());
+        chainList.forEach(chain ->
+            frontService.pullFrontList(latch, chain.getChainId(), mgrIp, mgrPort));
+        log.info("end pullFrontList");
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FrontMapper {
 
+   // ON DUPLICATE KEY UPDATE
     int add(TbFront tbFront);
 
     Integer getCount(FrontParam param);

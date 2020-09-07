@@ -307,4 +307,17 @@ public class CommonUtils {
         }
         return Integer.parseInt(str.substring(2), 16);
     }
+
+    /**
+     * year+month, ex: 202008, 202001
+     * @return
+     */
+    public static int getYearMonth(Long recordTimestamp) {
+        LocalDateTime recordTime = timestamp2LocalDateTime(recordTimestamp);
+        return getYearMonth(recordTime);
+    }
+
+    public static int getYearMonth(LocalDateTime recordTime) {
+        return recordTime.getYear() * 100 + recordTime.getMonthValue();
+    }
 }

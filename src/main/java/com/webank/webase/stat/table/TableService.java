@@ -26,25 +26,23 @@ public class TableService {
     @Autowired
     private TableMapper tableMapper;
 
-    public static final String PREFIX_TB_GROUP_BASIC_DATA = "tb_group_basic_data_";
-    public static final String PREFIX_TB_NETWORK_DATA = "tb_network_data_";
-    public static final String PREFIX_TB_GAS_DATA = "tb_gas_data_";
-    public static final String PREFIX_TB_NODE_MONITOR = "tb_node_monitor_";
-    public static final String PREFIX_TB_SERVER_PERFORMANCE = "tb_server_performance_";
+    // include partition
+    public static final String PREFIX_TB_GROUP_BASIC_DATA = "tb_group_basic_data";
+    public static final String PREFIX_TB_NODE_MONITOR = "tb_node_monitor";
+    public static final String PREFIX_TB_SERVER_PERFORMANCE = "tb_server_performance";
+    // deprecated
+    // public static final String PREFIX_TB_NETWORK_DATA = "tb_network_data_";
+    // public static final String PREFIX_TB_GAS_DATA = "tb_gas_data_";
 
-    public void createTable(Integer frontId) {
-        tableMapper.createTbGroupBasicData(PREFIX_TB_GROUP_BASIC_DATA + frontId);
-        tableMapper.createTbNetworkData(PREFIX_TB_NETWORK_DATA + frontId);
-        tableMapper.createTbGasData(PREFIX_TB_GAS_DATA + frontId);
-        tableMapper.createTbNodeMonitor(PREFIX_TB_NODE_MONITOR + frontId);
-        tableMapper.createTbServerPerformance(PREFIX_TB_SERVER_PERFORMANCE + frontId);
-    }
+//    public void createStatTable() {
+//        tableMapper.createTbGroupBasicData(PREFIX_TB_GROUP_BASIC_DATA);
+//        tableMapper.createTbNodeMonitor(PREFIX_TB_NODE_MONITOR);
+//        tableMapper.createTbServerPerformance(PREFIX_TB_SERVER_PERFORMANCE);
+//    }
 
-    public void dropTable(Integer frontId) {
-        tableMapper.dropTable(PREFIX_TB_GROUP_BASIC_DATA + frontId);
-        tableMapper.dropTable(PREFIX_TB_NETWORK_DATA + frontId);
-        tableMapper.dropTable(PREFIX_TB_GAS_DATA + frontId);
-        tableMapper.dropTable(PREFIX_TB_NODE_MONITOR + frontId);
-        tableMapper.dropTable(PREFIX_TB_SERVER_PERFORMANCE + frontId);
+    public void dropTable() {
+        tableMapper.dropTable(PREFIX_TB_GROUP_BASIC_DATA);
+        tableMapper.dropTable(PREFIX_TB_NODE_MONITOR);
+        tableMapper.dropTable(PREFIX_TB_SERVER_PERFORMANCE);
     }
 }

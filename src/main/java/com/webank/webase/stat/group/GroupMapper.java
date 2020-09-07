@@ -29,6 +29,8 @@ public interface GroupMapper {
      */
     int add(TbGroup tbGroup);
 
+    TbGroup findOne(@Param("frontId") Integer frontId, @Param("groupId") Integer groupId);
+
     /**
      * query group count.
      */

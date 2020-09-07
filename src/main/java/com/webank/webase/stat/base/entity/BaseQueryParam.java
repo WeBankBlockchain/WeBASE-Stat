@@ -13,7 +13,6 @@
  */
 package com.webank.webase.stat.base.entity;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +23,10 @@ import lombok.NoArgsConstructor;
 public class BaseQueryParam {
 
     private Integer frontId;
+    private Integer chainId;
     private Integer groupId;
     private Integer start;
     private Integer pageSize;
-    private LocalDateTime beginDate;
-    private LocalDateTime endDate;
+    private Long beginDate;
+    private Long endDate;
 }

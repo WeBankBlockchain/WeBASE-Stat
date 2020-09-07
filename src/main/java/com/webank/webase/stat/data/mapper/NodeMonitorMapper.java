@@ -33,7 +33,7 @@ public interface NodeMonitorMapper {
     /**
      * getList.
      */
-    TbNodeMonitor getMaxData(@Param("frontId") Integer frontId, @Param("groupId") Integer groupId);
+    TbNodeMonitor getMaxData(@Param("chainId") Integer chainId, @Param("frontId") Integer frontId, @Param("groupId") Integer groupId);
 
     /**
      * getCount.

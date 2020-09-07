@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.webank.webase.stat.frontinterface;
+package com.webank.webase.stat.restinterface;
 
 import com.webank.webase.stat.base.tools.JacksonUtils;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 /**
  * about http request for WeBASE-Front.
  */
-public class FrontRestTools {
+public class RestTools {
 
     public static final String FRONT_URL = "http://%1s:%2d/WeBASE-Front/%3s";
     public static final String URI_BLOCK_NUMBER = "web3/blockNumber";
@@ -44,6 +44,11 @@ public class FrontRestTools {
     public static final String URI_CHARGING_GET_NETWORK_DATA = "charging/getNetWorkData";
     public static final String URI_CHARGING_GET_TXGASDATA = "charging/getTxGasData";
     public static final String URI_CHARGING_DELETE_DATA = "charging/deleteData";
+
+    /* chain manager rest */
+    public static final String CHAIN_MANAGER_URL = "http://%1s:%2d/WeBASE-Chain-Manager/%3s";
+    public static final String CHAIN_MGR_URI_CHAIN_LIST = "chain/all";
+    public static final String CHAIN_MGR_URI_FRONT_LIST = "front/find";
 
     // 不需要在url中包含groupId的
     private static final List<String> URI_NOT_CONTAIN_GROUP_ID =
@@ -82,4 +87,6 @@ public class FrontRestTools {
         HttpEntity requestEntity = new HttpEntity(paramStr, headers);
         return requestEntity;
     }
+
+
 }

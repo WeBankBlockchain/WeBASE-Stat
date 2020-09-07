@@ -26,19 +26,23 @@ public class TbGroupBasicData {
 
     private Long id;
     private Integer frontId;
+    private Integer chainId;
     private Integer groupId;
     private Long size;
     private Long transCount;
     private String comment;
     private LocalDateTime createTime;
     private LocalDateTime modifyTime;
+    private Integer recordMonth;
 
-    public TbGroupBasicData(Integer frontId, Integer groupId, Long size, Long transCount,
-            String comment) {
+    public TbGroupBasicData(Integer chainId, Integer frontId, Integer groupId, Long size, Long transCount,
+            String comment, Integer recordMonth) {
+        this.chainId = chainId;
         this.frontId = frontId;
         this.groupId = groupId;
         this.size = size;
         this.transCount = transCount;
         this.comment = comment;
+        this.recordMonth = recordMonth;
     }
 }

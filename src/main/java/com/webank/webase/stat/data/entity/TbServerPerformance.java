@@ -19,12 +19,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_node_monitor.
+ * using sigar record of cpu, disk, memory, rxbps, txbps
  */
 @Data
 @NoArgsConstructor
 public class TbServerPerformance {
 
     private Long id;
+    private Integer chainId;
     private Integer frontId;
     private BigDecimal cpuUseRatio;
     private BigDecimal diskUseRatio;
@@ -32,11 +34,12 @@ public class TbServerPerformance {
     private BigDecimal rxbps;
     private BigDecimal txbps;
     private Long timestamp;
+    private Integer recordMonth;
 
-    public TbServerPerformance(Long id, Integer frontId, BigDecimal cpuUseRatio,
+    public TbServerPerformance(Integer chainId, Integer frontId, BigDecimal cpuUseRatio,
             BigDecimal diskUseRatio, BigDecimal memoryUseRatio, BigDecimal rxbps, BigDecimal txbps,
-            Long timestamp) {
-        this.id = id;
+            Long timestamp, Integer recordMonth) {
+        this.chainId = chainId;
         this.frontId = frontId;
         this.cpuUseRatio = cpuUseRatio;
         this.diskUseRatio = diskUseRatio;
@@ -44,5 +47,6 @@ public class TbServerPerformance {
         this.rxbps = rxbps;
         this.txbps = txbps;
         this.timestamp = timestamp;
+        this.recordMonth = recordMonth;
     }
 }

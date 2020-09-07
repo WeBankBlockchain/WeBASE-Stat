@@ -11,38 +11,18 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.webank.webase.stat.restinterface.entity;
 
-package com.webank.webase.stat.data.enums;
+import lombok.Data;
 
 /**
- * log type enums
+ * entity of TxGasData
  */
-public enum LogTypes {
-
-    UNKNOWN(0),
-
-    NETWORK(1),
-
-    TxGAS(2);
-
-    private int value;
-
-    LogTypes(Integer logTypes) {
-        this.value = logTypes;
-    }
-
-    public int getValue() {
-        return this.value;
-    }
-
-    public static boolean isInclude(int key) {
-        boolean include = false;
-        for (LogTypes e : LogTypes.values()) {
-            if (e.getValue() == key) {
-                include = true;
-                break;
-            }
-        }
-        return include;
-    }
+@Data
+public class TxGasData {
+    private Long id;
+    private String transHash;
+    private Long gasUsed;
+    private Integer groupId;
+    private Long timestamp;
 }

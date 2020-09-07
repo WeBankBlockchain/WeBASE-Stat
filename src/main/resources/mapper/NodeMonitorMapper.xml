@@ -10,6 +10,8 @@
 			property="id" />
 		<result column="front_id" javaType="java.lang.Integer"
 			jdbcType="INTEGER" property="frontId" />
+		<result column="chain_id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="chainId" />
 		<result column="group_id" javaType="java.lang.Integer"
 			jdbcType="INTEGER" property="groupId" />
 		<result column="block_height" javaType="java.math.BigInteger"
@@ -20,51 +22,65 @@
 			jdbcType="BIGINT" property="pendingTransactionCount" />
 		<result column="timestamp" javaType="java.lang.Long" jdbcType="BIGINT"
 			property="timestamp" />
+		<result column="record_month" javaType="java.lang.Integer"
+			jdbcType="INTEGER" property="recordMonth" />
 	</resultMap>
 
 	<insert id="add" parameterType="com.webank.webase.stat.data.entity.TbNodeMonitor">
 		insert into
-		tb_node_monitor_#{frontId}
-		(id,front_id,group_id,block_height,pbft_view,pending_transaction_count,timestamp)
-		values(#{id},#{frontId},#{groupId},#{blockHeight},#{pbftView},#{pendingTransactionCount},#{timestamp})
+		tb_node_monitor
+		(id,front_id,chain_id,group_id,block_height,pbft_view,pending_transaction_count,timestamp,record_month)
+		values(#{id},#{frontId},#{chainId},#{groupId},#{blockHeight},#{pbftView},#{pendingTransactionCount},#{timestamp},#{recordMonth})
 	</insert>
 
 	<select id="getMaxData" resultMap="basicResultMap">
 		select * from
-		tb_node_monitor_#{frontId}
+		tb_node_monitor
 		where id = (select max(id) from
-		tb_node_monitor_#{frontId} where group_id = #{groupId})
+		tb_node_monitor where group_id = #{groupId} and front_id = #{frontId} and chain_id = #{chainId})
 	</select>
 
 	<select id="getCount" resultType="java.lang.Integer">
 		select count(1) from
-		tb_node_monitor_#{frontId}
+		tb_node_monitor
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="groupId != null">
 			and group_id = #{groupId}
 		</if>
 		<if test="beginDate != null">
-			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+			and <![CDATA[ timestamp >= #{beginDate} ]]>
 		</if>
 		<if test="endDate != null">
-			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+			and <![CDATA[ timestamp < #{endDate}  ]]>
 		</if>
 	</select>
 
 	<select id="getList" resultMap="basicResultMap">
 		select * from
-		tb_node_monitor_#{frontId}
+		tb_node_monitor
 		where 1 = 1
+		<if test="chainId != null">
+			and chain_id = #{chainId}
+		</if>
+		<if test="frontId != null">
+			and front_id = #{frontId}
+		</if>
 		<if test="groupId != null">
 			and group_id = #{groupId}
 		</if>
 		<if test="beginDate != null">
-			<![CDATA[and timestamp >= UNIX_TIMESTAMP(#{beginDate})*1000]]>
+			and <![CDATA[ timestamp >= #{beginDate} ]]>
 		</if>
 		<if test="endDate != null">
-			<![CDATA[and timestamp <= UNIX_TIMESTAMP(#{endDate})*1000]]>
+			and <![CDATA[ timestamp < #{endDate}  ]]>
 		</if>
-		order by id desc
+		order by id asc
 		<if test="start != null and pageSize != null">
 			limit #{start},#{pageSize}
 		</if>

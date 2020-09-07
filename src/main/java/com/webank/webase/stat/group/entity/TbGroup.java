@@ -25,12 +25,14 @@ import lombok.NoArgsConstructor;
 public class TbGroup {
 
     private Integer frontId;
+    private Integer chainId;
     private Integer groupId;
     private String description;
     private LocalDateTime createTime;
     private LocalDateTime modifyTime;
 
-    public TbGroup(Integer frontId, Integer groupId, String description) {
+    public TbGroup(Integer chainId, Integer frontId, Integer groupId, String description) {
+        this.chainId = chainId;
         this.frontId = frontId;
         this.groupId = groupId;
         this.description = description;

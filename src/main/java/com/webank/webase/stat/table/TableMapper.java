@@ -23,15 +23,11 @@ public interface TableMapper {
     
     void createTbGroup();
     
-    void createTbGroupBasicData(@Param("tableName") String tableName);
+    void createTbGroupBasicData();
     
-    void createTbNetworkData(@Param("tableName") String tableName);
+    void createTbNodeMonitor();
     
-    void createTbGasData(@Param("tableName") String tableName);
-    
-    void createTbNodeMonitor(@Param("tableName") String tableName);
-    
-    void createTbServerPerformance(@Param("tableName") String tableName);
+    void createTbServerPerformance();
     
     void dropTable(@Param("tableName") String tableName);
 

@@ -29,4 +29,5 @@ public class ConstantProperties {
 
     private Integer pageSize = 5000;
     private Integer httpTimeOut = 10000;
+    private String chainMgrServer;
 }

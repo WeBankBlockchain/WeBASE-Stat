@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity class of table tb_node_monitor.
+ * node's group height and pbft view data
  */
 @Data
 @NoArgsConstructor
@@ -26,20 +27,23 @@ public class TbNodeMonitor {
 
     private Long id;
     private Integer frontId;
+    private Integer chainId;
     private Integer groupId;
     private BigInteger blockHeight;
     private BigInteger pbftView;
     private BigInteger pendingTransactionCount;
     private Long timestamp;
+    private Integer recordMonth;
 
-    public TbNodeMonitor(Long id, Integer frontId, Integer groupId, BigInteger blockHeight,
-            BigInteger pbftView, BigInteger pendingTransactionCount, Long timestamp) {
-        this.id = id;
+    public TbNodeMonitor(Integer chainId, Integer frontId, Integer groupId, BigInteger blockHeight,
+            BigInteger pbftView, BigInteger pendingTransactionCount, Long timestamp, Integer recordMonth) {
+        this.chainId = chainId;
         this.frontId = frontId;
         this.groupId = groupId;
         this.blockHeight = blockHeight;
         this.pbftView = pbftView;
         this.pendingTransactionCount = pendingTransactionCount;
         this.timestamp = timestamp;
+        this.recordMonth = recordMonth;
     }
 }

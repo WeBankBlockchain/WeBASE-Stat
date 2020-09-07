@@ -15,26 +15,19 @@ package com.webank.webase.stat.scheduler;
 
 import com.webank.webase.stat.base.properties.ConstantProperties;
 import com.webank.webase.stat.base.tools.CommonUtils;
-import com.webank.webase.stat.data.entity.TbGasData;
 import com.webank.webase.stat.data.entity.TbGroupBasicData;
-import com.webank.webase.stat.data.entity.TbNetWorkData;
 import com.webank.webase.stat.data.entity.TbNodeMonitor;
 import com.webank.webase.stat.data.entity.TbServerPerformance;
-import com.webank.webase.stat.data.enums.LogTypes;
-import com.webank.webase.stat.data.mapper.GasDataMapper;
 import com.webank.webase.stat.data.mapper.GroupBasicDataMapper;
-import com.webank.webase.stat.data.mapper.NetWorkDataMapper;
 import com.webank.webase.stat.data.mapper.NodeMonitorMapper;
 import com.webank.webase.stat.data.mapper.ServerPerformanceMapper;
 import com.webank.webase.stat.front.FrontService;
 import com.webank.webase.stat.front.entity.TbFront;
 import com.webank.webase.stat.front.entity.TransactionCount;
-import com.webank.webase.stat.frontinterface.FrontInterfaceService;
-import com.webank.webase.stat.frontinterface.entity.GroupSizeInfo;
-import com.webank.webase.stat.frontinterface.entity.NetWorkData;
-import com.webank.webase.stat.frontinterface.entity.NodeMonitor;
-import com.webank.webase.stat.frontinterface.entity.Performance;
-import com.webank.webase.stat.frontinterface.entity.TxGasData;
+import com.webank.webase.stat.restinterface.FrontInterfaceService;
+import com.webank.webase.stat.restinterface.entity.GroupSizeInfo;
+import com.webank.webase.stat.restinterface.entity.NodeMonitor;
+import com.webank.webase.stat.restinterface.entity.Performance;
 import com.webank.webase.stat.group.FrontGroupMapCache;
 import com.webank.webase.stat.group.entity.TbGroup;
 import java.time.Duration;
@@ -61,10 +54,6 @@ public class PullDataTask {
     @Autowired
     private GroupBasicDataMapper groupBasicDataMapper;
     @Autowired
-    private NetWorkDataMapper netWorkDataMapper;
-    @Autowired
-    private GasDataMapper gasDataMapper;
-    @Autowired
     private NodeMonitorMapper nodeMonitorMapper;
     @Autowired
     private ServerPerformanceMapper serverPerformanceMapper;
@@ -73,26 +62,25 @@ public class PullDataTask {
     @Autowired
     private ConstantProperties constantProperties;
 
+    /**
+     * monitor group data size and trans count
+     */
     @Scheduled(fixedDelayString = "${constant.pullGroupBasicDataInterval}", initialDelay = 1000)
     public void pullGroupBasicDataStart() {
         pullGroupBasicData();
     }
 
-    @Scheduled(fixedDelayString = "${constant.pullNetWorkDataInterval}", initialDelay = 1000)
-    public void pullNetWorkDataStart() {
-        pullNetWorkData();
-    }
-
-    @Scheduled(fixedDelayString = "${constant.pullGasDataInterval}", initialDelay = 1000)
-    public void pullGasDataStart() {
-        pullGasData();
-    }
-
+    /**
+     * monitor block height, pbft view etc.
+     */
     @Scheduled(fixedDelayString = "${constant.pullNodeMonitorInterval}", initialDelay = 1000)
     public void pullNodeMonitorStart() {
         pullNodeMonitor();
     }
 
+    /**
+     * monitor front's host cpu, memory tx_up tx_down etc.
+     */
     @Scheduled(fixedDelayString = "${constant.pullServerPerformanceInterval}", initialDelay = 1000)
     public void pullServerPerformanceStart() {
         pullServerPerformance();
@@ -103,7 +91,7 @@ public class PullDataTask {
      */
     public void pullGroupBasicData() {
         Instant startTime = Instant.now();
-        log.info("start pullGroupBasicData.", startTime.toEpochMilli());
+        log.info("start pullGroupBasicData time:{}", startTime.toEpochMilli());
 
         // get all front
         List<TbFront> frontList = frontService.getFrontList(null);
@@ -125,67 +113,7 @@ public class PullDataTask {
         }
 
         log.info("end pullGroupBasicData. useTime:{} ",
-                Duration.between(startTime, Instant.now()).toMillis());
-    }
-
-    /**
-     * pullNetWorkData.
-     */
-    public void pullNetWorkData() {
-        Instant startTime = Instant.now();
-        log.info("start pullNetWorkData.", startTime.toEpochMilli());
-
-        // get all front
-        List<TbFront> frontList = frontService.getFrontList(null);
-        if (CollectionUtils.isEmpty(frontList)) {
-            log.debug("not fount any front.");
-            return;
-        }
-
-        CountDownLatch latch = new CountDownLatch(frontList.size());
-        for (TbFront front : frontList) {
-            pullNetWorkDataByFront(latch, front);
-        }
-
-        try {
-            latch.await();
-        } catch (InterruptedException ex) {
-            log.error("InterruptedException", ex);
-            Thread.currentThread().interrupt();
-        }
-
-        log.info("end pullNetWorkData. useTime:{} ",
-                Duration.between(startTime, Instant.now()).toMillis());
-    }
-
-    /**
-     * pullGasData.
-     */
-    public void pullGasData() {
-        Instant startTime = Instant.now();
-        log.info("start pullGasData.", startTime.toEpochMilli());
-
-        // get all front
-        List<TbFront> frontList = frontService.getFrontList(null);
-        if (CollectionUtils.isEmpty(frontList)) {
-            log.debug("not fount any front.");
-            return;
-        }
-
-        CountDownLatch latch = new CountDownLatch(frontList.size());
-        for (TbFront front : frontList) {
-            pullGasDataByFront(latch, front);
-        }
-
-        try {
-            latch.await();
-        } catch (InterruptedException ex) {
-            log.error("InterruptedException", ex);
-            Thread.currentThread().interrupt();
-        }
-
-        log.info("end pullGasData. useTime:{} ",
-                Duration.between(startTime, Instant.now()).toMillis());
+            Duration.between(startTime, Instant.now()).toMillis());
     }
 
     /**
@@ -215,7 +143,7 @@ public class PullDataTask {
         }
 
         log.info("end pullNodeMonitor. useTime:{} ",
-                Duration.between(startTime, Instant.now()).toMillis());
+            Duration.between(startTime, Instant.now()).toMillis());
     }
 
     /**
@@ -245,7 +173,7 @@ public class PullDataTask {
         }
 
         log.info("end pullServerPerformance. useTime:{} ",
-                Duration.between(startTime, Instant.now()).toMillis());
+            Duration.between(startTime, Instant.now()).toMillis());
     }
 
     /**
@@ -254,6 +182,7 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullGroupBasicDataByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             Integer frontId = front.getFrontId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
@@ -261,13 +190,13 @@ public class PullDataTask {
             List<TbGroup> tbGroups = frontGroupMapCache.getMapByFrontId(frontId);
             // query groupSizeInfos
             List<GroupSizeInfo> groupSizeInfos =
-                    frontInterfaceService.getGroupSizeInfos(frontIp, frontPort);
+                frontInterfaceService.getGroupSizeInfos(frontIp, frontPort);
             for (TbGroup tbGroup : tbGroups) {
                 Integer groupId = tbGroup.getGroupId();
                 TransactionCount transactionCount;
                 try {
                     transactionCount = frontInterfaceService.getTotalTransactionCount(frontIp,
-                            frontPort, groupId);
+                        frontPort, groupId);
                 } catch (Exception e) {
                     continue;
                 }
@@ -279,91 +208,12 @@ public class PullDataTask {
                     }
                 }
                 // save data
-                groupBasicDataMapper.add(new TbGroupBasicData(frontId, groupId, size,
-                        transactionCount.getTxSum().longValue(), null));
+                groupBasicDataMapper.add(new TbGroupBasicData(chainId, frontId, groupId, size,
+                    transactionCount.getTxSum().longValue(), null,
+                    CommonUtils.getYearMonth(LocalDateTime.now())));
             }
         } catch (Exception ex) {
             log.error("fail pullGroupBasicDataByFront. frontId:{} ", front.getFrontId(), ex);
-        } finally {
-            latch.countDown();
-        }
-    }
-
-    /**
-     * pullNetWorkDataByFront.
-     */
-    @Async(value = "asyncExecutor")
-    private void pullNetWorkDataByFront(CountDownLatch latch, TbFront front) {
-        try {
-            Integer frontId = front.getFrontId();
-            String frontIp = front.getFrontIp();
-            Integer frontPort = front.getFrontPort();
-            // query group list
-            List<TbGroup> tbGroups = frontGroupMapCache.getMapByFrontId(frontId);
-            for (TbGroup tbGroup : tbGroups) {
-                Integer groupId = tbGroup.getGroupId();
-                TbNetWorkData tbNetWorkData =
-                        netWorkDataMapper.getMaxData(front.getFrontId(), groupId);
-                LocalDateTime lastDate = null;
-                if (!ObjectUtils.isEmpty(tbNetWorkData)) {
-                    lastDate =
-                            CommonUtils.timestamp2LocalDateTime(tbNetWorkData.getTimestamp() + 1);
-                }
-                List<NetWorkData> list = frontInterfaceService.getNetWorkData(frontIp, frontPort,
-                        groupId, constantProperties.getPageSize(), 1, lastDate, null);
-                // save data
-                for (NetWorkData data : list) {
-                    netWorkDataMapper.add(new TbNetWorkData(data.getId(), front.getFrontId(),
-                            groupId, data.getTotalIn(), data.getTotalOut(), data.getTimestamp()));
-                }
-                if (CollectionUtils.isEmpty(list) || lastDate == null) {
-                    continue;
-                }
-                // remove front data
-                frontInterfaceService.deleteLogData(frontIp, frontPort, groupId,
-                        LogTypes.NETWORK.getValue(), lastDate);
-            }
-        } catch (Exception ex) {
-            log.error("fail pullNetWorkDataByFront. frontId:{} ", front.getFrontId(), ex);
-        } finally {
-            latch.countDown();
-        }
-    }
-
-    /**
-     * pullGasDataByFront.
-     */
-    @Async(value = "asyncExecutor")
-    private void pullGasDataByFront(CountDownLatch latch, TbFront front) {
-        try {
-            Integer frontId = front.getFrontId();
-            String frontIp = front.getFrontIp();
-            Integer frontPort = front.getFrontPort();
-            // query group list
-            List<TbGroup> tbGroups = frontGroupMapCache.getMapByFrontId(frontId);
-            for (TbGroup tbGroup : tbGroups) {
-                Integer groupId = tbGroup.getGroupId();
-                TbGasData tbGasData = gasDataMapper.getMaxData(front.getFrontId(), groupId);
-                LocalDateTime lastDate = null;
-                if (!ObjectUtils.isEmpty(tbGasData)) {
-                    lastDate = CommonUtils.timestamp2LocalDateTime(tbGasData.getTimestamp() + 1);
-                }
-                List<TxGasData> list = frontInterfaceService.getTxGasData(frontIp, frontPort,
-                        groupId, constantProperties.getPageSize(), 1, lastDate, null, null);
-                // save data
-                for (TxGasData data : list) {
-                    gasDataMapper.add(new TbGasData(data.getId(), front.getFrontId(), groupId,
-                            data.getTransHash(), data.getGasUsed(), data.getTimestamp()));
-                }
-                if (CollectionUtils.isEmpty(list) || lastDate == null) {
-                    continue;
-                }
-                // remove front data
-                frontInterfaceService.deleteLogData(frontIp, frontPort, groupId,
-                        LogTypes.TxGAS.getValue(), lastDate);
-            }
-        } catch (Exception ex) {
-            log.error("fail pullGasDataByFront. frontId:{} ", front.getFrontId(), ex);
         } finally {
             latch.countDown();
         }
@@ -375,6 +225,7 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullNodeMonitorByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             Integer frontId = front.getFrontId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
@@ -384,18 +235,19 @@ public class PullDataTask {
             for (TbGroup tbGroup : tbGroups) {
                 Integer groupId = tbGroup.getGroupId();
                 TbNodeMonitor tbNodeMonitor =
-                        nodeMonitorMapper.getMaxData(front.getFrontId(), groupId);
+                    nodeMonitorMapper.getMaxData(front.getChainId(), front.getFrontId(), groupId);
                 LocalDateTime beginDate = null;
                 if (!ObjectUtils.isEmpty(tbNodeMonitor)) {
                     beginDate =
-                            CommonUtils.timestamp2LocalDateTime(tbNodeMonitor.getTimestamp() + 1);
+                        CommonUtils.timestamp2LocalDateTime(tbNodeMonitor.getTimestamp() + 1);
                 }
                 List<NodeMonitor> list = frontInterfaceService.getNodeMonitor(frontIp, frontPort,
-                        groupId, constantProperties.getPageSize(), 1, beginDate, null);
+                    groupId, constantProperties.getPageSize(), 1, beginDate, null);
                 for (NodeMonitor data : list) {
-                    nodeMonitorMapper.add(new TbNodeMonitor(data.getId(), front.getFrontId(),
-                            groupId, data.getBlockHeight(), data.getPbftView(),
-                            data.getPendingTransactionCount(), data.getTimestamp()));
+                    nodeMonitorMapper.add(new TbNodeMonitor(chainId, front.getFrontId(),
+                        groupId, data.getBlockHeight(), data.getPbftView(),
+                        data.getPendingTransactionCount(), data.getTimestamp(),
+                        CommonUtils.getYearMonth(data.getTimestamp())));
                 }
             }
         } catch (Exception ex) {
@@ -411,23 +263,24 @@ public class PullDataTask {
     @Async(value = "asyncExecutor")
     private void pullServerPerformanceByFront(CountDownLatch latch, TbFront front) {
         try {
+            Integer chainId = front.getChainId();
             String frontIp = front.getFrontIp();
             Integer frontPort = front.getFrontPort();
             // save data
             TbServerPerformance tbServerPerformance =
-                    serverPerformanceMapper.getMaxData(front.getFrontId());
+                serverPerformanceMapper.getMaxData(front.getChainId(), front.getFrontId());
             LocalDateTime beginDate = null;
             if (!ObjectUtils.isEmpty(tbServerPerformance)) {
                 beginDate =
-                        CommonUtils.timestamp2LocalDateTime(tbServerPerformance.getTimestamp() + 1);
+                    CommonUtils.timestamp2LocalDateTime(tbServerPerformance.getTimestamp() + 1);
             }
             List<Performance> list = frontInterfaceService.getServerPerformance(frontIp, frontPort,
-                    constantProperties.getPageSize(), 1, beginDate, null);
+                constantProperties.getPageSize(), 1, beginDate, null);
             for (Performance data : list) {
-                serverPerformanceMapper.add(new TbServerPerformance(data.getId(),
-                        front.getFrontId(), data.getCpuUseRatio(), data.getDiskUseRatio(),
-                        data.getMemoryUseRatio(), data.getRxbps(), data.getTxbps(),
-                        data.getTimestamp()));
+                serverPerformanceMapper.add(new TbServerPerformance(chainId,
+                    front.getFrontId(), data.getCpuUseRatio(), data.getDiskUseRatio(),
+                    data.getMemoryUseRatio(), data.getRxbps(), data.getTxbps(),
+                    data.getTimestamp(), CommonUtils.getYearMonth(data.getTimestamp())));
             }
         } catch (Exception ex) {
             log.error("fail pullServerPerformanceByFront. frontId:{} ", front.getFrontId(), ex);
