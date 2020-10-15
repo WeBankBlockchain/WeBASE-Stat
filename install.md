@@ -56,11 +56,12 @@ chmod +x ./gradlew && ./gradlew build -x test
 （2）修改服务配置，完整配置项说明请查看 [配置说明](./appendix.md#3-applicationyml配置项说明)
 ```shell
 修改服务端口：sed -i "s/5008/${your_server_port}/g" conf/application.yml
-修改数据库IP：sed -i "s/127.0.0.1/${your_db_ip}/g" conf/application.yml
+修改数据库IP：sed -i "s/mysql://127.0.0.1/mysql://${your_db_ip}/g" conf/application.yml
 修改数据库端口：sed -i "s/3306/${your_db_port}/g" conf/application.yml
 修改数据库名称：sed -i "s/webasestat/${your_db_name}/g" conf/application.yml
 修改数据库用户：sed -i "s/defaultAccount/${your_db_account}/g" conf/application.yml
 修改数据库密码：sed -i "s/defaultPassword/${your_db_password}/g" conf/application.yml
+修改ChainMgr的IPPort：sed -i "s/127.0.0.1:5005/${your_chainmgr_ip_port}/g" conf/application.yml
 ```
 
 ### 5.2 服务启停
