@@ -110,4 +110,21 @@ public class FrontController extends BaseController {
                 Duration.between(startTime, Instant.now()).toMillis());
         return baseResponse;
     }
+
+    /**
+     * delete by chainId
+     */
+    @DeleteMapping(value = "/batch/{chainId}")
+    public BaseResponse batchRemoveByChainId(@PathVariable("chainId") Integer chainId) {
+        Instant startTime = Instant.now();
+        log.info("start batchRemoveByChainId. chainId:{}", chainId);
+        BaseResponse baseResponse = new BaseResponse(ConstantCode.SUCCESS);
+
+        // remove
+        frontService.removeByChainId(chainId);
+
+        log.info("end batchRemoveByChainId useTime:{}",
+            Duration.between(startTime, Instant.now()).toMillis());
+        return baseResponse;
+    }
 }
