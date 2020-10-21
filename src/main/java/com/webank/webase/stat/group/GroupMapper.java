@@ -43,6 +43,7 @@ public interface GroupMapper {
 
     /**
      * remove by id.
+     * @param groupId can be null
      */
     int remove(@Param("frontId") Integer frontId, @Param("groupId") Integer groupId);
 }
