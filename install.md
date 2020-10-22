@@ -98,3 +98,46 @@ http://{deployIP}:{deployPort}/WeBASE-Stat/swagger-ui.html
 全量日志：tail -f log/WeBASE-Stat.log
 错误日志：tail -f log/WeBASE-Stat-error.log
 ```
+
+## 8. 执行数据表分表与定时分表
+
+#### 数据库数据表初始化
+
+数据表的初始化已在启动项目的时候，自动完成。启动完成后，需要执行下文的步骤中，通过`crontab`执行数据分表的定时任务
+
+#### 初始化数据表分区
+
+1. 初始化数据库后，回到项目父目录`cd ..`，运行第一次分区初始化，
+```
+bash partition.sh initNow
+```
+
+#### crontab定时更新数据表分区
+
+初始化成功后，在crontab中添加每月1日0时更新数据表下一个月分区的定时任务，表达式如下
+
+```
+0 * 1 * * bash /WeBASE-Stat/partition.sh >>/WeBASE-Stat/cron.log 2>&1 &
+```
+
+将在crontab中运行该表达式
+```shell
+# 检查crontab是否启动，否则先启动
+service crond status
+service crond start
+# 检查已有的crontab任务
+crontab -l
+# 导出已有的crontab任务到.tmp文件
+crontab -l >crontabs.tmp
+# 在.tmp中将表达式的命令加到.tmp文件中
+vi crontabs.tmp
+# 表达式为，每月1日0时执行/WeBASE-Stat/路径中的partition.sh脚本
+# 路径需要修改为对应项目的目录
+0 * 1 * * bash /WeBASE-Stat/partition.sh >>/WeBASE-Stat/cron.log 2>&1 &
+# crontab + 文件名，让命令生效
+crontab crontabs.tmp
+# 检查是否修改配置成功
+crontab -l
+# 修改后reload加载配置
+service crond reload 
+```
