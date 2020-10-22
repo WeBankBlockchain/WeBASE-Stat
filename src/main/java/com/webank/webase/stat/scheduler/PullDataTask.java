@@ -27,7 +27,7 @@ import com.webank.webase.stat.front.entity.TransactionCount;
 import com.webank.webase.stat.group.FrontGroupMapCache;
 import com.webank.webase.stat.group.entity.TbGroup;
 import com.webank.webase.stat.restinterface.FrontInterfaceService;
-import com.webank.webase.stat.restinterface.entity.G roupSizeInfo;
+import com.webank.webase.stat.restinterface.entity.GroupSizeInfo;
 import com.webank.webase.stat.restinterface.entity.NodeMonitor;
 import com.webank.webase.stat.restinterface.entity.Performance;
 import java.time.Duration;
