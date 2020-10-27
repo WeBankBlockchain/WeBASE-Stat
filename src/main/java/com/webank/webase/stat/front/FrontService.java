@@ -229,4 +229,27 @@ public class FrontService {
         // remove group
         groupService.removeByFrontId(frontId);
     }
+
+    /**
+     * remove front by chainId
+     */
+    public void removeByChainId(int chainId) {
+        log.info("removeByChainId batch chainId:{}", chainId);
+        FrontParam param = new FrontParam();
+        param.setChainId(chainId);
+
+        List<TbFront> frontList = getFrontList(param);
+        log.info("removeByChainId frontList:{}", frontList);
+        if (frontList == null || frontList.isEmpty()) {
+            return;
+        }
+        for (TbFront tbFront : frontList) {
+            Integer frontId = tbFront.getFrontId();
+            log.info("removeByChainId batch frontId:{}", frontId);
+            // remove front
+            frontMapper.removeById(frontId);
+            // remove group
+            groupService.removeByFrontId(frontId);
+        }
+    }
 }
