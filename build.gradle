@@ -121,13 +121,17 @@ jar {
     doLast {
         copy {
             from file('src/main/resources/')
-            into 'dist/conf_template'
+            into 'dist/conf'
             exclude '**/static'
         }
         copy {
-			from file('src/main/resources/static')
-			into 'dist/static'
-		}
+            from file('src/main/resources/static')
+            into 'dist/static'
+        }
+        copy {
+            from file('install.md')
+            into 'dist'
+        }
         copy {
             from file('script/')
             into 'dist/script'
