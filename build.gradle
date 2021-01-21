@@ -17,11 +17,12 @@ repositories {
     maven {url "http://maven.aliyun.com/nexus/content/groups/public/"}
     
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url 'https://dl.bintray.com/ethereum/maven/' }
     mavenLocal()
     mavenCentral()
 }
 
-def springboot_version="2.1.10.RELEASE"
+def springboot_version="2.1.16.RELEASE"
 List springboot = [
      "org.springframework.boot:spring-boot-starter-web:$springboot_version",
      "org.springframework.boot:spring-boot-starter-log4j2:$springboot_version",
@@ -73,7 +74,6 @@ dependencies {
     compile springboot,jaxb,jwt,swagger,jackson,mysql,web3jsdk
     
     compile "org.apache.commons:commons-lang3:3.8.1"
-    compile "com.alibaba:fastjson:1.2.67"
 
     compile lombok
     annotationProcessor lombok
@@ -89,6 +89,8 @@ configurations {
     all*.exclude group: 'jline', module: 'jline'
     all*.exclude group: 'com.google.protobuf', module: 'protobuf-java'
     all*.exclude group: 'javax.annotation', module: 'javax.annotation-api'
+    all*.exclude group: 'org.ethereum'
+    all*.exclude group: 'com.alibaba', module: 'fastjson'
 }
 
 sourceSets {

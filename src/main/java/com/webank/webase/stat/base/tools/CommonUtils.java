@@ -13,8 +13,6 @@
  */
 package com.webank.webase.stat.base.tools;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.webank.webase.stat.base.code.ConstantCode;
 import com.webank.webase.stat.base.code.RetCode;
 import com.webank.webase.stat.base.entity.BaseResponse;
@@ -106,30 +104,6 @@ public class CommonUtils {
         String localTimeStr = df.format(dateTime);
         return localTimeStr;
     }
-
-    /**
-     * conver object to java bean.
-     */
-    public static <T> T object2JavaBean(Object obj, Class<T> clazz) {
-        if (obj == null || clazz == null) {
-            log.warn("object2JavaBean. obj or clazz null");
-            return null;
-        }
-        String jsonStr = JSON.toJSONString(obj);
-
-        return JSON.parseObject(jsonStr, clazz);
-    }
-
-
-    public static JSONObject Object2JSONObject(Object obj) {
-        if (obj == null) {
-            log.warn("obj is null");
-            return null;
-        }
-        String objJson = JSON.toJSONString(obj);
-        return JSONObject.parseObject(objJson);
-    }
-
 
     /**
      * convert list to url param.
@@ -228,7 +202,7 @@ public class CommonUtils {
     public static void responseRetCodeException(HttpServletResponse response, RetCode retCode) {
         BaseResponse baseResponse = new BaseResponse(retCode);
         try {
-            response.getWriter().write(JSON.toJSONString(baseResponse));
+            response.getWriter().write(JacksonUtils.objToString(baseResponse));
         } catch (IOException e) {
             log.error("fail responseRetCodeException", e);
         }
@@ -277,20 +251,6 @@ public class CommonUtils {
     }
 
     /**
-     * is json.
-     */
-    public static boolean isJSON(String str) {
-        boolean result;
-        try {
-            JSON.parse(str);
-            result = true;
-        } catch (Exception e) {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
      * response string.
      */
     public static void responseString(HttpServletResponse response, String str) {
@@ -300,12 +260,13 @@ public class CommonUtils {
         }
 
         RetCode retCode;
-        if (isJSON(str) && (retCode = JSONObject.parseObject(str, RetCode.class)) != null) {
+        if (JacksonUtils.isJson(str)
+                && (retCode = JacksonUtils.stringToObj(str, RetCode.class)) != null) {
             baseResponse = new BaseResponse(retCode);
         }
 
         try {
-            response.getWriter().write(JSON.toJSONString(baseResponse));
+            response.getWriter().write(JacksonUtils.objToString(baseResponse));
         } catch (IOException e) {
             log.error("fail responseRetCodeException", e);
         }
