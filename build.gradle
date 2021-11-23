@@ -62,16 +62,16 @@ List mysql = [
     'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
 ]
 
-List web3jsdk = [
-    "org.fisco-bcos:web3sdk:2.3.0"
-]
-
 List test = [
     "org.springframework.boot:spring-boot-starter-test:$springboot_version"
 ]
 
 dependencies {
-    compile springboot,jaxb,jwt,swagger,jackson,mysql,web3jsdk
+    compile springboot,jaxb,jwt,swagger,jackson,mysql
+
+    compile('org.fisco-bcos:web3sdk:2.3.0') {
+        exclude group: 'org.ethereum', module: 'solcJ-all'
+    }
     
     compile "org.apache.commons:commons-lang3:3.8.1"
 
