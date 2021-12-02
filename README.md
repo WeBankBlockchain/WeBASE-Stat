@@ -1,6 +1,6 @@
 # 数据统计服务子系统
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE/CONTRIBUTING.html)
-[![Code Lines](https://tokei.rs/b1/github/WeBankFinTech/WeBASE-Stat?category=code)](https://github.com/WeBankFinTech/WeBASE-Stat)
+[![Code Lines](https://tokei.rs/b1/github/WeBankBlockchain/WeBASE-Stat?category=code)](https://github.com/WeBankBlockchain/WeBASE-Stat)
 [![license](http://img.shields.io/badge/license-Apache%20v2-blue.svg)](http://www.apache.org/licenses/)
 
 
