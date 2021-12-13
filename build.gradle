@@ -15,18 +15,24 @@ targetCompatibility = 1.8
 // In this section you declare where to find the dependencies of your project
 repositories {
     maven {url "http://maven.aliyun.com/nexus/content/groups/public/"}
-    
+    mavenCentral()
+    mavenLocal()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url 'https://dl.bintray.com/ethereum/maven/' }
-    mavenLocal()
-    mavenCentral()
 }
 
 def springboot_version="2.1.16.RELEASE"
 List springboot = [
      "org.springframework.boot:spring-boot-starter-web:$springboot_version",
-     "org.springframework.boot:spring-boot-starter-log4j2:$springboot_version",
      "org.springframework.boot:spring-boot-starter-jdbc:$springboot_version"
+]
+
+def log4j_version="2.15.0"
+List logger = [
+        "org.apache.logging.log4j:log4j-api:$log4j_version",
+        "org.apache.logging.log4j:log4j-core:$log4j_version",
+        "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version",
+        "org.apache.logging.log4j:log4j-web:$log4j_version"
 ]
 
 List jaxb = [
@@ -67,7 +73,7 @@ List test = [
 ]
 
 dependencies {
-    compile springboot,jaxb,jwt,swagger,jackson,mysql
+    compile springboot,jaxb,jwt,swagger,jackson,mysql,logger
 
     compile('org.fisco-bcos:web3sdk:2.3.0') {
         exclude group: 'org.ethereum', module: 'solcJ-all'
